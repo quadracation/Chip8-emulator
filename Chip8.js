@@ -1,21 +1,16 @@
 var Chip8 = function() {
-    Chip_Initialize;
-    Chip_Reset;
-    Chip_Run;
+    Chip_Initialize; 
+    Chip_loadHex;
+    Chip_Run; //opcodes
+    Chip_ConnectGraphicsToScreen;
 }
 
-var getWidth = function() {
-    return this.width;
-}
+var Chip_ConnectGraphicsToScreen = function() {
+    var canv = document.getElementById("screen");
+    var context = canv.getContext("2d");
+    context.drawFlag(drawFlag);
 
-var getHeight = function() {
-    return this.height();
 }
-
-var getProgramCounter = function() {
-    return this.pc;
-}
-
 
 
 var Chip_Initialize = function(){
@@ -23,19 +18,19 @@ var Chip_Initialize = function(){
 	this.memory=new Array(4096); 
 
 	//v and i
-	this.V= new Array(16);
-	this.I= 0x0;
+	this.V= new Array(16); 
+	this.I= 0x0; 
 	//program counter for instructions. 
     // this.pc= 0x200;
     this.pc = 0x200; 
     
     //Opcode:
-    this.opcode = 0;
+    this.opcode = 0; 
 
 
 	//stack and its pointer
-	this.stack= new Array(16);
-	this.stackpointer= 0;
+	this.stack= new Array(16); 
+	this.stackpointer= 0;  
 
 	//timers
 	this.delaytimer= 0;
@@ -45,12 +40,12 @@ var Chip_Initialize = function(){
 
 
     //Display Size of the Chip8 screen (x10)
-    this.height = 640;
-    this.width = 320;
+    this.displayHeight = 640; 
+    this.displayWidth = 320;
 
 	//display is 64*32 in dimension
-    this.display= new Array(height * width);
-	this.drawFlag = false; //When to draw question. True = display; False = !display
+    this.display= new Array(height * width); 
+	this.drawFlag = false; //When to draw question. True = display; False = !display 
 	//this.reset();	
 
 	//
@@ -64,13 +59,27 @@ var Chip_Initialize = function(){
 
 
 };
+
+var getWidth = function() {
+    return this.displayWidth;
+}
+
+var getHeight = function() {
+    return this.displayHeight;
+}
+
+var getProgramCounter = function() {
+    return this.pc;
+}
+
+
 //To simulate a class. You set this via ._proto_
 //Cannot be used yet.
 var Chip8_Prototype= {
     loadGame: function(gameName) {
         //load memory of game starting from memory location 0x200 (512)
         for(let i = 0; i < gameName.length; i++) {
-            memory[i + 0x200] = gameName[i];
+            memory[i + 0x200] = gameName[i]; 
         }
     },
     setkey: function(key) {
@@ -115,10 +124,10 @@ var Chip8_Prototype= {
 
 };
 
-var Chip_Reset= function() { //HEX
-    var hexChars = [
+var Chip_loadHex= function() { //HEX
+    var hexChars = [ 
         0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
-        0x20, 0x60, 0x20, 0x20, 0x70, // 1
+        0x20, 0x60, 0x20, 0x20, 0x70, // 1 
         0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
         0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
         0x90, 0x90, 0xF0, 0x10, 0x10, // 4
@@ -136,7 +145,7 @@ var Chip_Reset= function() { //HEX
     ];
 
     for (i = 0; i < hexChars.length; i++) {
-        this.memory[i] = hexChars[i];
+        this.memory[i] = hexChars[i]; 
     }
 }
 
@@ -149,7 +158,9 @@ var Chip_Run= function() { //Emulation Cycle
     this.memory[pc] = 0xA2;
     this.memory[pc+1] = 0xF0;
     
-    opcode = memory[pc] << 8 | memory[pc+1];
+  	//Opcodes are two bytes long (1-byte = 8bits; 16-bit). Regularly, you'll be set to 1-byte by default (it's the smallest size).
+  	//Therefore, you need to BIT SHIFT to the right (Multiplying by 2). 
+    opcode = memory[pc] << 8 | memory[pc+1]; 
     
     console.log("OpCode: " + opcode);
     console.log("Opcode & 0xF000: " + (opcode & 0xF000).toString());
@@ -157,10 +168,10 @@ var Chip_Run= function() { //Emulation Cycle
     console.log("Opcode & 0x00F0: " + (opcode & 0x00F0).toString());
 
     //Refer to these. Let vs. var (?) Use Let for now. 
-    let NNN = opcode & 0x0FFF;
+    let NNN = opcode & 0x0FFF; 
     let  NN = opcode & 0x00FF;
     //skipped N (opcode & 0x000F) since it became less clear 
-    let   X = (opcode & 0x0F00) >> 8; //takes out last 2 0's
+    let   X = (opcode & 0x0F00) >> 8; //takes out last 2 0's 
     let   Y = (opcode & 0x00F0) >> 4; //takes out last 0 
 
 	//Decode Opcode
@@ -173,27 +184,28 @@ var Chip_Run= function() { //Emulation Cycle
 	switch(opcode & 0xF000){
 		case 0x0000:
             //Since we have multiple 0's...
-            switch(opcode & 0x000F) {
+            switch(opcode & 0x000F) { 
                 case 0x0000: // [00E0]: Clears display
                     console.log("EMPTY (0NNN)");
                     break;
                 case 0x000E: // [00EE]: Returns from subroutine
-                    this.pc = this.stack[this.stackpointer];
-                    --this.stackpointer;
+                    this.pc = this.stack[this.stackpointer]; 
+                    this.stackpointer -= 2;
                     break;
-            }break;
+        	}
+        	break;
 
         case 0x1000: // [1NNN]: Jump to address 0x0FFF
             this.pc = NNN;
             break;
         case 0x2000: //[2NNN]: Calls subroutine(fx) at address NNN.
             this.stack[this.stackpointer] = this.pc; //Place it in stack to unwind later
-            ++this.stackpointer; //increment stack last position.
+            this.stackpointer += 2; //increment stack last position.
             this.pc = NNN; //again, first nibble is not needed. 
             break;
         case 0x3000: // [3XNN]: If VX == NN, then skip 1 operation. 
             //program counter(pc) is the one that tracks the instructions in memory. 
-            if( this.V[X] === NN) 
+            if( this.V[X] === NN ) 
                this.pc += 4; //increment to the next 2 bytes (next opcode) 
             else  
                 this.pc +=2;
@@ -206,16 +218,18 @@ var Chip_Run= function() { //Emulation Cycle
                 this.pc += 2;
             break;
 
-        case 0x5000: // [5XY0]: If VX === VY, skip 1 operation.
+        case 0x5000: // [5XY0]: If VX == VY, skip 1 operation.
             if( this.V[X] === this.V[Y]) 
-                this.pc += 2;
+                this.pc += 4;
+        	else 
+              	this.pc += 2;
             break;
         case 0x6000: // [6XNN]: Sets VX to NN. 
             this.V[X] = NN;
             this.pc += 2;
             break;
-        case 0x7000: // [7XNN]: Adds NN to VX (i.e., VX += NN); no carry flag.
-            let newLoc = this.V[X] + this.V[NN];
+        case 0x7000: // [7XNN]: Adds NN to V[X] (i.e., V[X] += NN); no carry flag.
+            let newLoc = this.V[X] + NN; 
             if(newLoc > 255) {
                 newLoc -= 256; //0 is included, so bound 255+1
             }
@@ -387,7 +401,7 @@ var Chip_Run= function() { //Emulation Cycle
                     }
                     break;
                 case 0x0065:
-                    //
+                    // 
                     break;
             }
             break;
