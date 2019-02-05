@@ -1,94 +1,131 @@
-var Chip_Initialize= function(comment){
-	//buffer of 0x1000, 4096 in decimal
-	this.memory=new Array(4096); 
+var Chip8 = function(){
+    //buffer of 0x1000, 4096 in decimal
+    var mem = new ArrayBuffer(0x1000);
+	this.memory = new Uint8Array(4096); 
 
 	//v and i
-	this.V= new Array(16);
-	this.I= 0x0;
+	this.V= new Array(16); 
+	this.I= 0x0; 
 	//program counter for instructions. 
-    this.pc= 0x200;
+    this.pc = 0x200; 
     
     //Opcode:
-    this.opcode = 0;
+    this.opcode = 0; 
 
 
 	//stack and its pointer
-	this.stack= new Array(16);
-	this.stackpointer= 0;
+	this.stack= new Array(16); 
+	this.stackpointer= 0;  
 
-	//timers
+	//timers  
 	this.delaytimer= 0;
 	this.soundtimer= 0;
 
-	this.keys= new Array(16);
+    this.keys= new Array(16);    
+
+
+    //Display Size of the Chip8 screen (x10)
+    this.displayHeight = 64; 
+    this.displayWidth = 32;
+
 	//display is 64*32 in dimension
-	this.display= new Array(64*32);
-	
-	//this.reset();	
+    this.display= new Array(this.displayHeight * this.displayWidth); 
+	this.drawFlag = false; //When to draw question. True = display; False = !display
 
 	//
-	console.log("Memory Length = " + memory.length);
-	console.log("V Length: " + V.length);
-	console.log("I Location: " + I);
-	console.log("PC Location: " + pc);
-	console.log("Stack Length: " + stack.length);
-	console.log("Key Length: " + keys.length);
-	console.log("Display Dimensions: " + display.length);
+	console.log("Memory Length = " + this.memory.length);
+	console.log("V Length: " + this.V.length);
+	console.log("I Location: " + this.I);
+	console.log("PC Location: " + this.pc);
+	console.log("Stack Length: " + this.stack.length);
+	console.log("Key Length: " + this.keys.length);
+	console.log("Display Dimensions: " + this.display.length);
 
 
 };
+
+Chip8.prototype.getDisplayArray = function() {
+    return this.display;
+};
+
+Chip8.prototype.getMemory = function() {
+    return this.memory;
+};
+
+Chip8.prototype.getWidth = function() {
+    return this.displayWidth;
+};
+
+Chip8.prototype.getHeight = function() {
+    return this.displayHeight;
+};
+
 //To simulate a class. You set this via ._proto_
 //Cannot be used yet.
-var Chip8_Prototype= {
-    loadGame: function(gameName) {
-        //load memory of game starting from memory location 0x200 (512)
-        for(let i = 0; i < gameName.length; i++) {
-            memory[i + 0x200] = gameName[i];
-        }
-    },
-    setkey: function(key) {
-        this.keys[key]=true;
-        //function sets the key into keys array to true
-    },
-    deletekey: function(key){
-        delete this.keys[key];
-        //removes the key from the array
-    },
-    setrenderer: function(renderer){
-        this.renderer= renderer; 
-    },
+Chip8.prototype.loadGame= function(gameName) {
+    //load memory of game starting from memory location 0x200 (512)
+    for(let i = 0; i < gameName.length; i++) {
+        memory[i + 0x200] = gameName[i]; 
+    }
+};
+Chip8.prototype.setKey= function(key) {
+    this.keys[key]=true;
+    //function sets the key into keys array to true
+};
+Chip8.prototype.deleteKey= function(key){
+    delete this.keys[key];
+    //removes the key from the array
+};
+Chip8.prototype.setRenderer= function(renderer){
+    this.renderer= renderer; 
+};
+
+Chip8.prototype.setPixel= function(x,y){
+    // var curr_location;
+    var width= dislayWidth;
+    var height= displayHeight;
+    if(x>width){
+        x=x-width;
+    }
+    else if(x<width){
+        x=x+width;
+    }
+    //corner case when X is out of range
+
+    if(y>height){
+        y=y-height;
+    }
+    else if(y<height){
+        y=y+height;
+    }
+    //corner case when Y is out of range
     
-    setpixel: function(x,y){
-        var curr_location;
-        var width= 64;
-        var height= 32;
-        if(x>width){
-            x=x-width;
-        }
-        else if(x<width){
-            x=x+width;
-        }
-        //corner case when X is out of range
+    location=x+(y*width);
+    this.display[location] ^= 1;
+    
+    return !this.display[location];
 
-        if(y>height){
-            y=y-height;
-        }
-        else if(y<height){
-            y=y+height;
-        }
-        //corner case when Y is out of range
-        
-        location=x+(y*width);
-        this.display[location] ^= 1;
-        
-        return !this.display[location];
+};
+Chip8.prototype.startup= function(x,y){ 
+    var runChip = function() {
+        Chip_Run();
 
-
+        if(this.drawFlag) {
+            this.renderer.render(this.display); //Draw once. 
+            this.drawFlag = false; //Only draw when necessary (draw once until triggered again) 
+        }
+        runChip(); //loop
     }
 
 };
+function random_mem_alloc() {
+    for(let chip8_random_mem_test = this.memory[512]; chip8_random_mem_test < this.memory[1536]; chip8_random_mem_test++) {
+        this.memory[chip8_random_mem_test]= (Math.floor(Math.random() * 0xFF) & NN);
+    }
+}
 
-var Chip_Reset= function() {
+
+var Chip_loadHex= function() { //HEX
     var hexChars = [
         0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
         0x20, 0x60, 0x20, 0x20, 0x70, // 1
@@ -113,14 +150,19 @@ var Chip_Reset= function() {
     }
 }
 
-
-var Chip_Run= function() {
+var Chip_Run= function() { //Emulation Cycle 
 	//Fetch Opcode
 	//To fetch the opcode, keep in mind that opcodes are 16 bits long (2 bytes) where 1byte = 8. 
 	//We need to shift the memory locations (4 bits) 8 to the left in order to make room for the operation.
 	//start emulation from 0x200(512) and use binary OR operation to merge after shifting. This will give you 16 bits (2 bytes).
-    opcode = memory[pc] >> 8 | memory[pc+1];
+    
+    
+    opcode = memory[pc] << 8 | memory[pc+1];
+    
     console.log("OpCode: " + opcode);
+    console.log("Opcode & 0xF000: " + (opcode & 0xF000).toString());
+    console.log("Opcode & 0x0F00: " + (opcode & 0x0F00).toString());
+    console.log("Opcode & 0x00F0: " + (opcode & 0x00F0).toString()); 
 
     //Refer to these. Let vs. var (?) Use Let for now. 
     let NNN = opcode & 0x0FFF;
@@ -134,17 +176,18 @@ var Chip_Run= function() {
 	//Because there are 35 distinct opcodes, we will use a switch statement to keep things simple.
 	//Use opcode & 0xF000 to find the first nibble.
 	//If you need to check the back (e.g., repeated operation( 0 ) or repeated instructions (F series)), make another inner switch statement to check
-	//... the last nibble(s) using either 0x000F or 0x0FF. Think of "F" as "keep" and "0" as "throw away".
+    //... the last nibble(s) using either 0x000F or 0x0FF. Think of "F" as "keep" and "0" as "throw away".
+    //Similar to a while-loop, we must iterate pc onto th next code (2bytes) after eachnon-jump/set nstruction.
 	switch(opcode & 0xF000){
 		case 0x0000:
             //Since we have multiple 0's...
             switch(opcode & 0x000F) {
                 case 0x0000: // [00E0]: Clears display
                     console.log("EMPTY (0NNN)");
+                    pc+=2;
                     break;
                 case 0x000E: // [00EE]: Returns from subroutine
-                    this.pc = this.stack[this.stackpointer];
-                    --this.stackpointer;
+                    this.pc = this.stack[--this.stackpointer];
                     break;
             }break;
 
@@ -153,46 +196,60 @@ var Chip_Run= function() {
             break;
         case 0x2000: //[2NNN]: Calls subroutine(fx) at address NNN.
             this.stack[this.stackpointer] = this.pc; //Place it in stack to unwind later
-            ++this.stackpointer; //increment stack last position.
-            this.pc = NNN; //again, first nibble is not needed. 
+            this.stackpointer += 2; //increment stack last position.
+            this.pc = NNN; //again, first nibble is not needed.
             break;
         case 0x3000: // [3XNN]: If VX == NN, then skip 1 operation. 
             //program counter(pc) is the one that tracks the instructions in memory. 
             if( this.V[X] === NN) 
-               this.pc += 2; //increment to the next 2 bytes (next opcode) 
+               this.pc += 4; //increment to the next 2 bytes (next opcode) 
+            else  
+                this.pc +=2;
             break;
+
         case 0x4000: // [4XNN]: If VX != NN, then skip 1 operation. 
             if( this.V[X] !== NN) 
-            this.pc += 2;
+                this.pc += 4;
+            else
+                this.pc += 2;
             break;
+
         case 0x5000: // [5XY0]: If VX === VY, skip 1 operation.
-            if( this.V[X] === this.V[Y]) 
+            if( this.V[X] === this.V[Y])
+                this.pc += 4;
+            else
                 this.pc += 2;
             break;
         case 0x6000: // [6XNN]: Sets VX to NN. 
             this.V[X] = NN;
+            this.pc += 2;
             break;
         case 0x7000: // [7XNN]: Adds NN to VX (i.e., VX += NN); no carry flag.
-            let newLoc = this.V[X] + this.V[NN];
+            let newLoc = this.V[X] + NN;
             if(newLoc > 255) {
                 newLoc -= 256; //0 is included, so bound 255+1
             }
             this.V[X] = newLoc;
+            this.pc += 2;
             break;
         case 0x8000:
             //We have multiple.
             switch(opcode & 0x000F) {
                 case 0x0000: // [8XY0]: Sets VX to the value of VY
                     this.V[X] = this.V[Y];
+                    this.pc += 2;
                     break;
                 case 0x0001: // [8XY1]: Sets VX to the value of VX|VY
                     this.V[X] = ( this.V[X] | this.V[Y]); // |=
+                    this.pc += 2;
                     break;
                 case 0x0002: // [8XY2]: Sets VX to VX & VY
                     this.V[X] = ( this.V[X] & this.V[Y]); // &=
+                    this.pc += 2;
                     break;
                 case 0x0003: // [8XY3]: Sets VX to VX xor VY
                     this.V[X] = ( this.V[X] ^ this.V[Y] ); // ^=
+                    this.pc += 2;
                     break;
                 case 0x0004: // [8XY4]: Add VY to VX (i.e., VX += VY), where VX and VY are registers for X,Y
                     //Add first. See if the sum is larger than 255. If so, carry 0xF = 1. 
@@ -205,27 +262,51 @@ var Chip_Run= function() {
                     this.pc+=2; //next 2 bytes
                     break;
                 case 0x0005: //[8XY5]: VY is subtracted from VX. VF is set to 0 when there's a borrow, and 1 when there isn't. 
-                    //
+                    let newLoc2 = this.V[X] - this.V[Y];
+                    if (this.V[Y] > this.V[X]){
+                        this.V[0xF] = 0;
+                    }else{
+                        this.V[0xF] = 1;
+                    }
 
+                    this.V[X] = newLoc2;
+                    if (this.V[X] < 0){
+                        this.V[X] += 256;
+                    }
+                    this.pc += 2;
                     break;
-                case 0x0006:
-                    //
+                case 0x0006: //[8XY6]: Stores the least significant bit of VX in VF and then shifts VX to the right by 1.
+                    this.V[0xF] = this.V[X] & 0xFF;
+                    this.V[X] >>=1;
+                    this.pc += 2;
                     break;
                 case 0x0007:
-                    //
+                    this.V[X] = this.V[Y] - this.V[X];
+                    if (this.V[X] > this.V[X]){
+                      this.V[0xF] = 0;
+                    }else{
+                      this.V[0xF] = 1;
+                    }
+                    if (this.V[X] < 0){
+                      this.V[X] += 256;
+                    }
+                    this.pc += 2;
                     break;
                 case 0x000E:
-                    //
+                    this.V[0xF] = this.V[X] & 0x000F;
+                    this.V[X] <<= 1;
+                    this.pc += 2;
                     break;
-
             } 
             break;
         
         case 0x9000: //[9XY0]: If(Vx != Vy), then skip next instruction (Add 2 to this.pc). 
-            if(this.V[X] != this.V[Y]) {
+            if(this.V[X] != this.V[Y]) 
+                this.pc += 4;
+            else 
                 this.pc += 2;
-            }
-            break;
+            
+            break;  
 
         case 0xA000: // [ANNN]: Sets I to the address NNN. 
             this.I = NNN; //since the first nibble is not needed. 
@@ -238,12 +319,42 @@ var Chip_Run= function() {
 
         case 0xC000: // [CXNN]: Set V[X] = Random number from 0 to 255 & NN 
             this.V[X] = (Math.floor(Math.random() * 0xFF) & NN) // 0xFF == int(255) Found this from: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
+            this.pc += 2;
             break;
 
-        case 0xD000: // [DXYN]: Draw. No idea how to do this. Pls Send Halp.
-            //
-            break;
+        case 0xD000: // [DXYN]: Draw pixels onto screen in location (Y,X) with height N. 1<=Height<=F; Max Width = 8bits (1byte)
+            // Invert the bit value (pixel shade) upon collision (you check ful 15x8 sprite).
+            //Since Javascript doesn't really have a preference between Column vs. Row Ordering, we assume (Y,X) and not (X,Y).
+            //i.e., Y=x-axis(col), X=y-axis(row). 
+            let xCoord = this.V[X];
+            let yCoord = this.V[Y];
+            let pixHeight = this.V[opcode&0X000F];
 
+            //VF is set to 1 when there is a pixel Collision; 0 when there is not. i.e., VF = 0 by default.
+            this.V[0xF] = 0;
+            //Parsing through your display array, check to see if the requested pixel location is 1 and the existing area is 1.
+            for(let row = 0; row < pixHeight; row++) { //[...][Y]
+                //Pixel: Start in memory at location I. Parsing through the rows, so I+i
+                pixel = memory[I + row]; 
+                //[X][...]
+                for(let col = 0; col < 8; j++) { //Check through the max width (1-byte). Chip8 images are full sprites of 15x8 pixels. 
+                    //Check if the pixel and the row collide (a^b, a=b -> FALSE). 
+                    //Do this by having pixel AND with (8-bit binary string >> current(i)) be checked for 1 (1^1 = FALSE) -> VFflag.
+                    if((pixel & 0x80) == 1) { //If already drawn somewhere. 1 here is 'a' in a^b
+                        //If the FILLED area (think of area formula) of the current display field is still 1(b)
+                        //a^b, a=b=1 -> FALSE. Flag triggered. We're using locations via bit addition. Ask for more info!
+                        if( this.setPixel(this.V[X]+col, this.V[Y] + row)){ 
+                            //If (X + xDisplacement, Y + yDisplacement * fillWidth(64)) == filled (1):
+                            this.V[0xF] = 1; // Set flag if 1^1 (FALSE)
+                        }
+
+                    } // if
+                    pixel <<= 1;
+                } // for(col)
+            } // for(row)
+
+            drawFlag = true;
+            break;
         case 0xE000:
             //Has multiple opcodes.
             switch(opcode & 0x000F) {
@@ -284,14 +395,6 @@ var Chip_Run= function() {
                     this.memory[I+1] = val%10;
                     val /= 10;
                     this.memory[I] = val%10;
-
-                    //HARDER WAY (also works):
-                    // // take the decimal representation of VX, 
-                    // // place the hundreds digit in memory at location in I, 
-                    // // the tens digit at location I+1, and the ones digit at location I+2
-                    // memory[I]   = V[ (X) >> 8 ] / 100; 
-                    // memory[I+1] = (V[ (X) >> 8 ] / 10) % 10; //Get tens place and % for digit
-                    // memory[I+2] = (V[ (X) >> 8 ] % 100) % 10; //Take out 100s, take out 10s, % for digit
                     break;
                 case 0x0055: //stores registers V0 to VX in memory from location I
                     for (var i=0; i<=X;i++){
@@ -299,7 +402,9 @@ var Chip_Run= function() {
                     }
                     break;
                 case 0x0065:
-                    //
+                    for (var i=0; i<=X; i++){
+                        this.V[i] = this.memory[this.I+i];
+                    }
                     break;
             }
             break;
@@ -313,24 +418,4 @@ var Chip_Run= function() {
 
 }
 
-
-
-
-
-
-//Wasn't able to create a class. Will have to use this for our constructor outside of a class. Be careful of this! 
-var Chip8_Constructor = function() {
-    Chip_Initialize();
-    Chip_Reset();
-
-	Chip_Run(); 
-}
-
-function main() {
-	Chip8_Constructor();
-
-	// console.log("\n");
-	// Chip_Initialize();
-	// console.log("\n");
-}
-main();
+//DONE
