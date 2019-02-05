@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>
+            Group 16 CHIP-8 Emulator
+        </title>
+
+        <style>
+            /* Tag Styles (inherit) */ 
+            h1      {color: black;}
+            h2      {color: #6d6061;}
+            body    {color: white;} /*Temporary*/
+            canvas  {display: block; background-color: rgb(46, 46, 46);}
+            /* textarea{resize: none;} */
+
+            /* div Styles (classes) */
+            .mainViewSection{ /* For most of the screen below the Header. Used to encompass horizontal alignment */
+                width: 100%;
+                height: 500px;
+                background-color: black;
+                padding: 10px;
+            }
+            .chipView{
+                display: inline-block;
+                padding-left: 30px;
+
+            }
+            .memorySection{  /* For the [Memory] Scroll Box */
+                width : 200px;
+                height: 290px;
+                display: inline-block;
+
+                border-color: black;
+                background-color: rgb(124, 122, 122);
+                border: 2px solid black;
+                padding: 15px;
+
+                font-family: 'Courier New', Courier, monospace;
+                color: white;
+                overflow: auto;
+            }
+
+        </style>
+
+        <h1><center><font size = "+10">
+            CHIP-8
+        </font></center></h1>
+
+        <h2><center>
+            Dev. by: Group#16
+        </center></h2>
+
+        <script src = "Chip8.js"></script> 
+        <script src = "visuals.js"></script>
+        <script type="text/javascript"> var numbers = []; </script>
+    </head>
+
+    <body>  
+
+
+        
+        <div class="mainViewSection">
+            <br>
+            <script>
+                    var chip = new Chip8;
+            </script>
+
+            
+            <div class="memorySection"> 
+                <pre id="memoryRecord"> </pre>
+
+                <script type="text/javascript">
+                    var lastString = chip.getMemory().indexOf(0).toString() + "<br>";
+                    for(let i = 1; i < chip.getMemory().length; i++) {
+                        lastString += "Number[" + i + "]:  " + chip.getMemory().indexOf(i).toString() + "<br>";
+                        
+                    
+                        // document.write(chip.getMemory().indexOf(i) + "   "); //So I don't forget (:
+
+                        //Sequential Input: (BELOW) v
+                        //if(chip.getMemory().indexOf(i) !== -1) document.write(chip.getMemory().indexOf(i) + "   ");
+                    }
+                    document.getElementById("memoryRecord").innerHTML = lastString;  
+                    // for(let i = 0; i < chip.getDisplayArray().length; i++) {
+                    //     document.write(chip.getDisplayArray().indexOf(i) + "   ");
+                    // }
+                </script>
+
+            </div>
+            <div class="chipView">
+                    <canvas id="chipScreen" width="640" height="320" style="border: 2px solid black"> </canvas>
+                    <script>
+                            var canvas = document.getElementById("chipScreen");
+                            var pixelScalar = 5;
+                            var renderView = new Renderer(canvas, chip.getHeight(), chip.getWidth(), pixelScalar);
+                            chip.setRenderer(renderView); 
+                            // chip.startup(); //Will output nothing on the web page (no draw flags triggered by selected ROMS).
+            
+                                //Will display one large square (they're all 2046 pixels back to back):
+                            chip.renderer.render(chip.getDisplayArray()); /*Temporary*/
+                    </script> 
+                </div>
+    
+
+        </div>
+        
+ 
+
+
+ 
+
+
+    </body>
+
+</html>
