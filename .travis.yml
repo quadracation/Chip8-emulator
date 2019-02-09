@@ -1,7 +1,6 @@
-language: javascript
+language: node_js
 node_js:
-  - "iojs"
-  - "7"
-before_script:
-  - npm install -g gulp-cli
-script: gulp default
+  - "6"
+  - "6.1"
+  - "5.11"
+  - "5.1"
