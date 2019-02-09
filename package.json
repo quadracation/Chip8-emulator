@@ -1,0 +1,30 @@
+{
+  "name": "276-emulator",
+  "version": "1.0.0",
+  "description": "A CHIP-8 emulator developed using the javascript language.",
+  "main": "Chip8.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quadracation/276-emulator.git"
+  },
+  "keywords": [
+    "GitHub",
+    "Travis",
+    "Node",
+    "Tools",
+    "Build",
+    "CI"
+  ],
+  "author": "Jin, Ian, William, Ben, Wassim",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/klugjo/travis-node-test/issues"
+  },
+  "homepage": "https://github.com/quadracation/276-emulator#readme",
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  }
+}
