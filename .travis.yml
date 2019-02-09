@@ -1,4 +1,4 @@
 language: javascript
 javascript:
   - "stable"
-script: gulp travis
+script: gulp default
