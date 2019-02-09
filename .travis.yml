@@ -1,1 +1,4 @@
 language: javascript
+javascript:
+  - "stable"
+script: gulp travis
