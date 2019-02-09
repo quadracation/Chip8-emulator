@@ -1,4 +1,7 @@
 language: javascript
-javascript:
-  - "stable"
+node_js:
+  - "iojs"
+  - "7"
+before_script:
+  - npm install -g gulp-cli
 script: gulp default
