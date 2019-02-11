@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/quadracation/276-emulator#readme",
   "devDependencies": {
-    "mocha": "^2.4.5"
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }
