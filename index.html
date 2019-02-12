@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>[CMPT-276]: CHIP-8 Emulator</title>
+
+    <style>
+        canvas {
+            width : 640px;
+            height: 320px;
+
+            border: 2px solid black;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="chipScreen"></canvas>
+    <script src = "Chip8_Second.js"></script>
+    <script src = "visuals_Second.js"></script>
+    <script>
+        // console.log("1234 & 0xf000: " + (1234 & 0xf000));
+        var cpu = new CPU();
+        var renderer = new Renderer(document.getElementById("chipScreen"), 
+                                    cpu.getDisplayHeight, cpu.getDisplayWidth, 
+                                    10);
+        cpu.setRenderer(renderer);
+        cpu.startup();
+        cpu.randomizeMemory();
+        // cpu.loadChipImage();
+        cpu.run();
+    </script>
+    <script>
+        setInterval(function() {
+            if(cpu.running === true) {
+                cpu.run();
+            }
+        }, 2000); //2 seconds
+    </script>
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
