@@ -546,9 +546,9 @@ class CPU {
 
 } //class CPU
 
-//special thanks to: ETHAN P.
-function draw() {
-    window.requestAnimationFrame(draw); // This MUST be called recursively
-}
+// //special thanks to: ETHAN P.
+// function draw() {
+//     window.requestAnimationFrame(draw); // This MUST be called recursively
+// }
 
-window.requestAnimationFrame(draw);
+// window.requestAnimationFrame(draw);
