@@ -254,3 +254,287 @@ describe('OpCode Testing', function() {
 
 });//Opcode Testing
 
+//0x8XY2
+describe('Code 0x8XY2', function(){
+  describe('Sets VX to VX & VY', function(){
+    var opcode = 0x8442;
+    var X = (opcode & 0x0F00) >> 8; //4
+    var Y = (opcode & 0x00F0) >> 4; //4
+    let V = new Array(5);
+    V[4] = 0x0056;
+    var Z = V[X] & V[Y];
+    it('Checks if V[X] = V[opcode & 0x0F00 >> 8]', function(){
+      assert.equal(V[X],V[4]);
+    });
+    it('Checks that V[X] = V[X] & V[Y]', function(){
+      assert.equal(Z,V[4]);
+    });
+  });
+});
+
+
+//0x8XY3
+describe('Code 0x8XY3', function(){
+  describe('Sets V[X] to V[X] xor V[Y]', function(){
+    var opcode = 0x8443;
+    var X = (opcode & 0x0F00) >> 8;
+    var Y = (opcode & 0x00F0) >> 4;
+    let V = new Array(5);
+    V[4] = 0;
+    var Z = V[X] ^ V[Y];
+    it('Checks if V[X] = V[opcode & 0x0F00 >> 8]', function(){
+      assert.equal(V[X], V[4]);
+    });
+    it('Checks that V[X] = V[X] ^ V[Y]', function(){
+      assert.equal(Z,V[4]);
+    });
+  });
+});
+
+//0x8XY4
+var isOne = function(number){
+  if (number == 1){
+    return true;
+  }else{
+    return false;
+  }
+}
+var removeNum = function(number){
+  number = number - 256;
+}
+var boolCheck = function(number){
+  if (number > 255){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+describe('Code 0x8XY4', function(){
+  describe('Adds V[X] to V[Y] and checks if the sum is larger than 255 or not', function(){
+    var opcode = 0x8444;
+    var X = (opcode & 0x0F00) >> 8; //4
+    var Y = (opcode & 0x00F0) >> 4; //4
+    let V = new Array(16);
+    V[4] = 0x0056;
+    V[0xF] = 1;
+    var newLoc = V[X] + V[Y];
+    var actans = 172; //actual sum of vx and vy
+    it('Checks requirements if newLoc > 255', function(){
+      if (boolCheck(newLoc) == true){
+        assert.equal(boolCheck(actans),true);
+        assert.equal(removeNum(actans), removeNum(actans));
+        assert.equal(V[0xF],1);
+      }
+    });
+    it('Checks requirements if newLoc <= 255', function(){
+      if (boolCheck(newLoc) == false){
+        assert.equal(boolCheck(actans), false);
+        assert.equal(isOne(actans), false);
+      }
+    });
+  });
+});
+
+//0x8XY5
+var addNum = function(n1){
+  n1 = n1 + 256;
+}
+
+var boolCheck2 = function(n1,n2){
+  if (n1 > n2){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+var lessthanZero = function(n1){
+  if (n1 < 0){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+describe('Code 0x8XY5', function(){
+  describe('V[Y] is subtracted from V[X]. VF is set to 0 when theres a borrow, and 1 when there isnt', function(){
+    var opcode = 0x8445;
+    var X = (opcode & 0x0F00) >> 8; //4
+    var Y = (opcode & 0x00F0) >> 4; //4
+    let V = new Array(16);
+    V[4] = 0x0056;
+    V[0xF] = 1;
+    var newLoc = V[X] - V[Y]; //0
+    var actans = 0; //actual difference of vx and vy
+    it('Checks requirements if V[Y] > V[X]', function(){
+      if (boolCheck2(V[Y], V[X]) == true){
+        assert.equal(V[0xF],0);
+        assert.equal(newLoc, 0);
+      }
+    });
+    it('Checks requirements if V[Y] <= V[X]', function(){
+      if (boolCheck2(V[Y], V[X]) == false){
+        assert.equal(V[0xF],1);
+        assert.equal(newLoc,0);
+      }
+    });
+    it('Checks requirements if V[X] < 0', function(){
+      if (lessthanZero(V[X]) == true){
+        assert.equal(addNum(V[X]),V[4]+256);
+      }
+    });
+  });
+});
+
+//0x8XY6
+describe('Code 0x8XY6', function(){
+  describe('Stores the least significant bit of VX in VF and then shifts VX to the right by 1.', function(){
+    var opcode = 0x8446;
+    var X = (opcode & 0x0F00) >> 8; //4
+    let V = new Array(16);
+    V[4] = 0x0056;
+    V[0xF] = V[X] & 0xFF; //86
+    V[X] >>= 1; //43
+    it('Stores the least significant bit of V[X] in V[F]', function(){
+      assert.equal(V[0xF],86);
+    });
+    it('Shifts V[X] to the right by 1', function(){
+      assert.equal(V[X], 43);
+    });
+  });
+});
+
+//0x8XY7
+describe('Code 0x8XY7', function(){
+  describe('V[X] is subtracted from V[Y], stored in V[X], VF is set to 0 when theres a borrow, and 1 when there isnt', function(){
+    var opcode = 0x8447;
+    var X = (opcode & 0x0F00) >> 8; //4
+    var Y = (opcode & 0x00F0) >> 4; //4
+    let V = new Array(16);
+    V[4] = 0x0056;
+    V[0xF] = 1;
+    var newLoc = V[Y] - V[X]; //0
+    var actans = 0; //actual difference of vy and vx
+    it('Checks requirements if V[Y] > V[X]', function(){
+      if (boolCheck2(V[Y], V[X]) == true){
+        assert.equal(V[0xF], 0);
+        assert.equal(newLoc,0);
+      }
+    });
+    it('Checks requirements if V[Y] <= V[X]]', function(){
+      if (boolCheck2(V[Y], V[X]) == false){
+        assert.equal(V[0xF],1);
+        assert.equal(newLoc,0);
+      }
+    });
+    it('Checks requirements if V[X] < 0', function(){
+      if (lessthanZero(V[X]) == true){
+        assert.equal(addNum(V[X]), V[4]+256);
+      }
+    });
+  });
+});
+
+//0x8XYE
+describe('Code 0x8XYE', function(){
+  describe('Stores the significant bits of VX in VF and then shifts VX to the right by 1.', function(){
+    var opcode = 0x844E;
+    var X = (opcode & 0x0F00) >> 8; //4
+    let V = new Array(16);
+    V[4] = 0x0056;
+    V[0xF] = V[X] & 0x000F; //6
+    V[X] >>= 1; //43
+    it('Stores the significant bits of of V[X] in V[F]', function(){
+      assert.equal(V[0xF], 6);
+    });
+    it('Shifts V[X] to the right by 1', function(){
+      assert.equal(V[X],43);
+    });
+  });
+});
+
+//0x9XY0
+var checkEqual = function(n1,n2){
+  if (n1 == n2){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+describe('Code 0x9XY0', function(){
+  describe('If(Vx != Vy), then skip next instruction (Add 2 to this.pc)', function(){
+    var opcode = 0x9440;
+    var X = (opcode & 0x0F00) >> 8; //4
+    var Y = (opcode & 0x00F0) >> 4; //4
+    let V = new Array(16);
+    V[4] = 0x0056;
+    var pc = 0;
+    it('Checks pc is incremented by 4 when V[X] != V[Y]', function(){
+      if (checkEqual(V[X], V[Y]) == false){
+        pc += 4;
+        assert.equal(pc,4);
+      }
+    });
+    it('Checks pc is incremented by 2 when V[X] == V[Y]', function(){
+      if (checkEqual(V[X], V[Y]) == true){
+        pc += 2;
+        assert.equal(pc,2);
+      }
+    });
+  });
+});
+
+//0xANNN
+describe('Code 0xANNN', function(){
+  describe('Sets I to the address NNN', function(){
+    var opcode = 0xA442; //42050
+    var NNN = opcode & 0x0FFF; //1090
+    var I = NNN;
+    it('Check to see if I is set to address NNN', function(){
+      assert.equal(I,1090);
+    });
+  });
+});
+
+//0xBNNN
+describe('Code 0xBNNN', function(){
+  describe('Jump to address NNN + V0 (Set this.pc to NNN + V0)', function(){
+    var opcode = 0xB442; //46146
+    var NNN = opcode & 0x0FFF; //1090
+    let V = new Array(16);
+    V[0] = 5;
+    it('Check to see if pc increments to NNN + V[0]', function(){
+      var pc = NNN + V[0];
+      assert.equal(pc,1095);
+    });
+  });
+});
+
+//0xCXNN
+var checkTruth = function(n1){
+  if (0 <= n1 && n1 <= 255){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+var randoBro = function(n1){
+  var bro = (Math.floor(Math.random() * 0xFF) & n1);
+  return bro;
+}
+
+describe('Code 0xCXNN', function(){
+  describe('Set V[X] = Random number from 0 to 255 & NN', function(){
+    var opcode = 0xC442; //50242
+    var NN = opcode & 0x00FF; //66
+    var X = (opcode & 0x0F00) >> 8; //4
+    let V = new Array(16);
+    it('Check that V[X] is set to a random number from 0 to 255 & NN', function(){
+      assert.equal(checkTruth(randoBro(NN)), true);
+    });
+  });
+});
+
