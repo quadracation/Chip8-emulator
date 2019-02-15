@@ -16,19 +16,36 @@ Renderer.prototype.clear=function(){
 };
 
 
+//Might not use anymore.
+//PROBLEM: 
+/*
+Althuogh the bits are being loaded CORRECTLY, the used method is only suitable for 2D arrays.
+TWO OPTIONS:
+1) Turn this.display in Chip8.js into a 2D Array (and mae necessary changes); or
+2) Reformat and find out the mathematical algorithm for putting the sprites in correctly.
+Goodluck! I'm off to enjoy my Valentine's Day now (':
+-- Jin 
+*/
 Renderer.prototype.render=function(displayArray){                  //pass in our displayArray from Chip8.js --> ... = Array(64 * 32);
-    let x; let y;
-    this.clear();                                                  //This will display a "glitching" effect, ...
+    console.log("RENDER");
+    // this.clear();                                                  //This will display a "glitching" effect, ...
                                                                    //...common with the CHIP-8 program. 
     
-    for(let i = 0; i < displayArray.length; i++){                  // [ ...EXPLAINED BELOW... ]
-        x = (i % this.width) * this.scalar;                        // . . .
-        y = Math.floor(i / this.width) * this.scalar;              // . . .
+    for(let i = 0; i < displayArray.length; i++){   
+        console.log("FOR-LOOP RENDER");               // [ ...EXPLAINED BELOW... ]
+
+        // if(displayArray[i] === "1"){
+            let x = (i % this.width) * this.scalar;                        // . . .
+            let y = Math.floor(i / this.height) * this.scalar;              // . . .
         
                                                                    //Colour and fill in the pixel at the specified location
                                                                    //# R G B -> # 00 00 00; each R/G/B is 1-byte long (2 nibbles)
-        this.context.fillStyle = "#000000";                        //000000 = no reflected light -> black matter (black colour)
-        this.context.fillRect(x, y, this.scalar, this.scalar);     //fillRext(xCord, yCord, xWidth, yHeight)
+                                                                   
+            if(displayArray[i] == 1) this.context.fillStyle = "#4286f4";                        //000000 = no reflected light -> black matter (black colour)
+            else this.context.fillStyle = "#ffffff";
+            this.context.fillRect(x, y, this.scalar, this.scalar);     //fillRext(xCord, yCord, xWidth, yHeight)
+        // }
+        // else {}
     }
 
 };
