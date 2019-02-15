@@ -5,55 +5,68 @@
     <title>[CMPT-276]: CHIP-8 Emulator</title>
 
     <style>
-        canvas {
+        /* canvas {
             width : 640px;
             height: 320px;
 
             border: 2px solid black;
             display: inline-block;
-        }
+        } */
     </style>
 </head>
 <body>
-    <canvas id="chipScreen"></canvas>
-    <script src = "Chip8_Second.js"></script>
-    <script src = "visuals_Second.js"></script>
+        <canvas id="chipScreen" width="640" height="320" style="border: 2px solid black"> </canvas>
+    <script src = "Chip8.js"></script>
+    <script src = "visual.js"></script>
     <script>
         // console.log("1234 & 0xf000: " + (1234 & 0xf000));
         var cpu = new CPU();
-        var renderer = new Renderer(document.getElementById("chipScreen"), 
-                                    cpu.getDisplayHeight, cpu.getDisplayWidth, 
+        var canv = document.getElementById("chipScreen");
+        var rend = new Renderer(canv, cpu.getHeight(), cpu.getWidth(), 
                                     10);
-        cpu.setRenderer(renderer);
+        cpu.setRenderer(rend);
         cpu.startup();
         cpu.randomizeMemory();
+
+        var testHex = [ //fuck
+        0xF0,
+        0x90,
+        0x90,
+        0x90,
+        0xF0,
+
+        0x00,
+        
+        0x20,
+        0x60,
+        0x20,
+        0x20,
+        0x70
+        ];
+    // console.log(testHex[0].toString(16));//WORKS: GIVES YOU "FF"
+        // var hexArr = [0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, 0x00, 0x01, 0x01, 0x01, 0x00, 0x60];
+        // var hexArr = [0x01];
+        cpu.loadIntoDisplayArray(testHex);
         // cpu.loadChipImage();
-        cpu.run();
     </script>
-    <script>
+    <!-- <script>
         setInterval(function() {
             if(cpu.running === true) {
-                cpu.run();
+                console.log("FUCK");
+                cpu.drawFlag = true;
+                // cpu.cycle();
+                
+                if(cpu.drawFlag == true) {
+                    
+                
+                    console.log("DRAW");
+                    cpu.drawOntoScreen();
+                }
             }
         }, 2000); //2 seconds
-    </script>
+    </script> -->
 
 </body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
