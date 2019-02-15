@@ -17,8 +17,9 @@ class CPU {
 
         this.keys = new Array(16); 											        //Stores what keys we press on the keyboard
 
-        this.displayHeight = 64;
-        this.displayWidth  = 32;
+        
+        this.displayWidth  = 64 ; //64x32
+        this.displayHeight = 32;
         this.display       = new Array(this.displayHeight * this.displayWidth); 	//2048
         this.drawFlag      = false;                                                 //When to draw (trigger boolean)
         this.renderer      = undefined;										        
@@ -83,9 +84,9 @@ class CPU {
     randomizeMemory(){
         for(let i=0x200; i< 0x1000;i++){
             var num = Math.floor(Math.random() * 0xFF); //Special Thanks to: Ethan P. for "*0xFF"
-            console.log("Num: " + num);
+            // console.log("Num: " + num);
             this.memory[i] = num;
-            console.log("Memory["+i+"]: " + this.memory[i]);
+            // console.log("Memory["+i+"]: " + this.memory[i]);
         }
 
     }
@@ -98,16 +99,113 @@ class CPU {
         }
     }
 
-    loadIntoDisplayArray(arr) {
-        for(let i = 0; i < arr.length; i++) {
-            this.display[i] = arr[i];
-            console.log("Display["+i+"]: " + arr[i])
+    // loadIntoDisplayArray(arr) {
+    //     for(let i = 0; i < arr.length; i++) {
+    //         this.display[i] = arr[i];
+    //         console.log("Display["+i+"]: " + arr[i])
+    //     }
+    //     // this.drawFlag = true;
+    // }
+
+    Hex2Bin(hex) {
+        // //Tried everything else. Didn't work. It's 2AM. Nvm, it's 3AM now. (:
+        let bin = "";
+        if(hex.length === 1) bin += "0000";
+        for(let i = 0; i < hex.length; i++) {
+            switch(hex[i]){
+                case '0': bin += "0000"; break;
+                case '1': bin += "0001"; break;
+                case '2': bin += "0010"; break;
+                case '3': bin += "0011"; break;
+                case '4': bin += "0100"; break;
+                case '5': bin += "0101"; break;
+                case '6': bin += "0110"; break;
+                case '7': bin += "0111"; break;
+                case '8': bin += "1000"; break;
+                case '9': bin += "1001"; break;
+
+                case 'a': bin += "1010"; break;
+                case 'b': bin += "1011"; break;
+                case 'c': bin += "1100"; break;
+                case 'd': bin += "1101"; break;
+                case 'e': bin += "1110"; break;
+                case 'f': bin += "1111"; break;
+                default:
+                    break;
+            }
         }
-        // this.drawFlag = true;
+        
+        console.log("Fuck");
+        return bin;
+    }
+
+    loadIntoDisplayArray(hexArr) { 
+        //Separate each hex into a binary string. Each bit of each hex index is put into the next this.display index.
+        //Example: hexArr[0] = 0x96 => Binary: 10010110 => "1,0,0,1,0,1,1,0" => d[0]="1", d[1] = "0", d[2] = "0", d[3] = "0", d[4] = "1", ...
+        for(let d = 0, h = 0; d < this.display.length, h < hexArr.length; d+=8, h++) {
+            let binary = this.Hex2Bin(hexArr[h].toString(16));
+            console.log("Binary: " + binary + ", Hex: " + hexArr[h].toString(16));//Confirmed to work 
+
+            //Load the byte (8 indexes for 8 bits) by splitting:
+            //You could most likely refactor this. When you do (someone), please only COMMENT THIS OUT. DO NOT DELETE THIS.
+            this.display[d+0] = binary[0];
+            this.display[d+1] = binary[1];
+            this.display[d+2] = binary[2];
+            this.display[d+3] = binary[3];
+            this.display[d+4] = binary[4];
+            this.display[d+5] = binary[5];
+            this.display[d+6] = binary[6];
+            this.display[d+7] = binary[7];            
+        }
+        console.log(this.display);
+        this.drawOntoScreen();
+        //End
+
+        // for(let i = 0; i < this.display.length; i += 8) { //1 byte (2 nibbles); ex: 0xA2: A, 2 : 4/ea. = 8 per.
+        //     for(let h = 0; h < hexArr.length; h++) {
+        //         // let binary = this.Hex2Bin(hexArr[h].toString(16));
+        //         let binary = this.Hex2Bin(hexArr[h].toString(16));
+        //         console.log("Binary: " + binary + ", Hex: " + hexArr[h].toString(16));//Confirmed to work 
+
+        //         //Load the byte (8 indexes for 8 bits) by splitting:
+        //         //You could most likely refactor this. When you do (someone), please only COMMENT THIS OUT. DO NOT DELETE THIS.
+        //         this.display[i+0] = binary[0];
+        //         this.display[i+1] = binary[1];
+        //         this.display[i+2] = binary[2];
+        //         this.display[i+3] = binary[3];
+        //         this.display[i+4] = binary[4];
+        //         this.display[i+5] = binary[5];
+        //         this.display[i+6] = binary[6];
+        //         this.display[i+7] = binary[7];
+                
+        //     }
+            
+        // }
+
+        // for(let i = 0; i < hexArr.length; i++) {
+        //     let binary = this.Hex2Bin(hexArr[i].toString(16));
+        //     console.log("Binary: " + binary + ", Hex: " + hexArr[i].toString(16));
+
+        //     //PROBLEM: LOADING IN CORRECTLY 
+        //     this.display[i] = binary[0];
+        //     this.display[i+1] = binary[1];
+        //     this.display[i+2] = binary[2];
+        //     this.display[i+3] = binary[3];
+        //     this.display[i+4] = binary[4];
+        //     this.display[i+5] = binary[5];
+        //     this.display[i+6] = binary[6];
+        //     this.display[i+7] = binary[7];
+        // }
+        
+
     }
 
 
+
+
+
     startup() { //Start up the program; Initializer
+        this.running = true;
 
         let hexChars = [ //Defining the FONT Sets (79 indexes)
             0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -157,20 +255,9 @@ class CPU {
 
     } //function: STARTUP()
 
-    loadChipImage() {
-        
-        var chip8_picture = [0x00, 0xE0, 0xA2, 0x48, 0x60, 0x00, 0x61, 0x1E, 0x62, 0x00, 0xD2, 0x02, 0xD2, 0x12, 0x72, 0x08, 0x32, 0x40, 0x12, 0x0A, 0x60, 0x00, 0x61, 0x3E, 0x62, 0x02, 0xA2, 0x4A, 0xD0, 0x2E, 0xD1, 0x2E, 0x72, 0x0E, 0xD0, 0x2E, 0xD1, 0x2E, 0xA2, 0x58, 0x60, 0x0B, 0x61, 0x08, 0xD0, 0x1F, 0x70, 0x0A, 0xA2, 0x67, 0xD0, 0x1F, 0x70, 0x0A, 0xA2, 0x76, 0xD0, 0x1F, 0x70, 0x03, 0xA2, 0x85, 0xD0, 0x1F, 0x70, 0x0A, 0xA2, 0x94, 0xD0, 0x1F, 0x12, 0x46, 0xFF, 0xFF, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xFF, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xFF, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0xFF, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xFF, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0xFF, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xFF, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0xFF, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0xFF, 0xFF];
-
-        for(let m = 0; m < chip8_picture.length; m++) { //Initializing/Defining Display array
-            this. display[m] = chip8_picture[m];
-            
-        }
-        this.renderer.render(this.display);
-    }
-
     reset() { //Reset: Startup & reset all values to 0/false
 
-        this.pc           = 0;
+        this.pc           = 0x200;
         this.stackPointer = 0;
 
         this.drawFlag     = false;
@@ -179,14 +266,47 @@ class CPU {
         this.delayTimer   = 0;
         this.soundTimer   = 0;
 
-        startup();
+        this.startup();
 
     } //function RESET()
 
-    run() { //Running the program. Initialized outside of this file in an infinite loop
+    //DO NOT DELETE THIS. THIS *WILL* BE USED.
+    // emulate() {
+    //     this.reset();
+        
+    //     //loadGame()....
+
+    //     for(;;) {
+    //         this.cycle();
+
+    //         if(this.drawFlag === true) {
+    //             drawOntoScreen();
+    //         }
+
+    //         //Get User Input through Keys
+    //     }
+    // }
+    
+    drawOntoScreen() {
+        //<somehow> load all HEX values from the .ch8 file
+
+        //Parse and draw
+        if(this.renderer !== null || this.renderer !== undefined) {
+            this.renderer.render(this.display);
+            // ????
+            // for(let i = 0; i < this.Hex2Bin.display.length; i++) {
+            //     if(this.display[i] == 1) { //'1' == 1 (confirmed)
+            //         //Do some funky math to draw at the right spot. Use 'i' to help. I'm going to bed now. It's 3:16 AM. 
+            //     }
+            // }
+        }
+    }
+
+
+    cycle() { //Running the program. Initialized outside of this file in an infinite loop
 
         if(!this.paused) {
-            var opcode = this.memory[this.pc] << 8 | this.memory[this.pc+1];
+            let opcode = this.memory[this.pc] << 8 | this.memory[this.pc+1];
             
             //Special thanks to: ETHAN P. for these console logs
             console.log("OpCode: " + opcode.toString(16).padStart(4, '0'));
@@ -202,7 +322,7 @@ class CPU {
             //skipped N (opcode & 0x000F) since it became less clear 
             let   X = (opcode & 0x0F00) >> 8; //takes out last 2 0's
             let   Y = (opcode & 0x00F0) >> 4; //takes out last 0 
-
+            
             //Decode Opcode
             //Now that you have your opcode, you need to figure out which instruction set and operation you need to do.
             //Because there are 35 distinct opcodes, we will use a switch statement to keep things simple.
@@ -210,24 +330,24 @@ class CPU {
             //If you need to check the back (e.g., repeated operation( 0 ) or repeated instructions (F series)), make another inner switch statement to check
             //... the last nibble(s) using either 0x000F or 0x0FF. Think of "F" as "keep" and "0" as "throw away".
             //Similar to a while-loop, we must iterate pc onto th next code (2bytes) after eachnon-jump/set nstruction.
-            switch(opcode & 0xf000){
+            switch(opcode & 0xF000){
                 case 0x0000:
                     //Since we have multiple 0's...
-                    switch(opcode & 0x000F) {
-                        case 0x0000: // [00E0]: Clears display
+                    switch(opcode & 0x00FF) {
+                        case 0x00E0: // [00E0]: Clears display
                             for(let i = 0; i < this.display.length; i++) {
                                 this.display[i] = 0;
                             }
                             this.pc += 2;
                             break;
-                        case 0x000E: // [00EE]: Returns from subroutine
+                        case 0x00EE: // [00EE]: Returns from subroutine
                             this.pc = this.stack[--this.stackpointer];
                             break;
                         default:
                             //No such code:
                             console.log("Operation Code not Supported.");
                             // throw new Error("User inputted"+ opcode.toString(16)+",Terminating");
-                            this.pc+=4;
+                            this.pc+=2;
                             break;
                     }break;
 
@@ -236,13 +356,13 @@ class CPU {
                     break;
                 case 0x2000: //[2NNN]: Calls subroutine(fx) at address NNN.
                     this.stack[this.stackpointer] = this.pc; //Place it in stack to unwind later
-                    this.stackpointer += 2; //increment stack last position.
+                    this.stackpointer++; //increment stack last position.
                     this.pc = NNN; //again, first nibble is not needed.
                     break;
                 case 0x3000: // [3XNN]: If VX == NN, then skip 1 operation. 
                     //program counter(pc) is the one that tracks the instructions in memory. 
                     if( this.V[X] === NN) 
-                    this.this.pc += 4; //increment to the next 2 bytes (next opcode) 
+                        this.this.pc += 4; //increment to the next 2 bytes (next opcode) 
                     else  
                         this.pc +=2;
                     break;
@@ -266,9 +386,10 @@ class CPU {
                     break;
                 case 0x7000: // [7XNN]: Adds NN to VX (i.e., VX += NN); no carry flag.
                     let newLoc = this.V[X] + NN;
-                    if(newLoc > 255) {
-                        newLoc -= 256; //0 is included, so bound 255+1
-                    }
+                    //I don't think you need this; from Cowgod's guide.
+                    // if(newLoc > 255) { //In case you access the wrong area of memory 
+                    //     newLoc -= 256; //0 is included, so bound 255+1
+                    // }
                     this.V[X] = newLoc;
                     this.pc += 2;
                     break;
@@ -369,39 +490,60 @@ class CPU {
                     break;
 
                 case 0xD000: // [DXYN]: Draw pixels onto screen in location (Y,X) with height N. 1<=Height<=F; Max Width = 8bits (1byte)
-                    // Invert the bit value (pixel shade) upon collision (you check ful 15x8 sprite).
-                    //Since Javascript doesn't really have a preference between Column vs. Row Ordering, we assume (Y,X) and not (X,Y).
-                    //i.e., Y=x-axis(col), X=y-axis(row). 
-                    let xCoord = this.V[X];
-                    let yCoord = this.V[Y];
-                    let pixHeight = this.V[opcode&0x000f];
-
-                    //VF is set to 1 when there is a pixel Collision; 0 when there is not. i.e., VF = 0 by default.
+                    let heightN = opcode & 0x000F;
+                    let pixel = 0;
                     this.V[0xF] = 0;
-                    //Parsing through your display array, check to see if the requested pixel location is 1 and the existing area is 1.
-                    for(let row = 0; row < pixHeight; row++) { //[...][Y]
-                        //Pixel: Start in memory at location I. Parsing through the rows, so I+i
-                        pixel = memory[I + row]; 
-                        //[X][...]
-                        for(let col = 0; col < 8; j++) { //Check through the max width (1-byte). Chip8 images are full sprites of 15x8 pixels. 
-                            //Check if the pixel and the row collide (a^b, a=b -> FALSE). 
-                            //Do this by having pixel AND with (8-bit binary string >> current(i)) be checked for 1 (1^1 = FALSE) -> VFflag.
-                            if((pixel & 0x80) == 1) { //If already drawn somewhere. 1 here is 'a' in a^b
-                                //If the FILLED area (think of area formula) of the current display field is still 1(b)
-                                //a^b, a=b=1 -> FALSE. Flag triggered. We're using locations via bit addition. Ask for more info!
-                                if( this.setPixel(xCoord+col, yCoord+ row)){ 
-                                    //If (X + xDisplacement, Y + yDisplacement * fillWidth(64)) == filled (1):
-                                    this.V[0xF] = 1; // Set flag if 1^1 (FALSE)
+
+                    for(let row = 0; row < heightN; row++) {
+                        pixel = this.memory[this.I + row];
+                        for(let col = 0; col < 8; col++) {
+                            if( (pixel & (0x80 >> col)) != 0 ) {
+                                if(this.display[ (this.X + col + ((this.Y + row)*64)) ]) {
+                                    this.V[0xF] = 1;
                                 }
-
-                            } // if
-                            pixel <<= 1;
-                        } // for(col)
-                    } // for(row)
-
-                    this.drawFlag = true; //Not signalling? -> Will fix later 
-                    this.pc+=2; //Looping solution(?) -> Will fix later
+                                this.display[ this.X + col + ((this.Y + row)*64) ] ^= 1;
+                            }
+                        }
+                    }
+                    this.drawFlag = true;
+                    this.pc += 2;
+                    //Courtesy of multigesture.net on How to make a Chip8 Interpreter
                     break;
+
+
+
+                    // // Invert the bit value (pixel shade) upon collision (you check ful 15x8 sprite).
+                    // //Since Javascript doesn't really have a preference between Column vs. Row Ordering, we assume (Y,X) and not (X,Y).
+                    // //i.e., Y=x-axis(col), X=y-axis(row). 
+                    // let xCoord = this.V[X];
+                    // let yCoord = this.V[Y];
+                    // let pixHeight = this.V[opcode&0x000f];
+
+                    // //VF is set to 1 when there is a pixel Collision; 0 when there is not. i.e., VF = 0 by default.
+                    // this.V[0xF] = 0;
+                    // //Parsing through your display array, check to see if the requested pixel location is 1 and the existing area is 1.
+                    // for(let row = 0; row < pixHeight; row++) { //[...][Y]
+                    //     //Pixel: Start in memory at location I. Parsing through the rows, so I+i
+                    //     pixel = memory[I + row]; 
+                    //     //[X][...]
+                    //     for(let col = 0; col < 8; j++) { //Check through the max width (1-byte). Chip8 images are full sprites of 15x8 pixels. 
+                    //         //Check if the pixel and the row collide (a^b, a=b -> FALSE). 
+                    //         //Do this by having pixel AND with (8-bit binary string >> current(i)) be checked for 1 (1^1 = FALSE) -> VFflag.
+                    //         if((pixel & 0x80) == 1) { //If already drawn somewhere. 1 here is 'a' in a^b
+                    //             //If the FILLED area (think of area formula) of the current display field is still 1(b)
+                    //             //a^b, a=b=1 -> FALSE. Flag triggered. We're using locations via bit addition. Ask for more info!
+                    //             if( this.setPixel(xCoord+col, yCoord+ row)){ 
+                    //                 //If (X + xDisplacement, Y + yDisplacement * fillWidth(64)) == filled (1):
+                    //                 this.V[0xF] = 1; // Set flag if 1^1 (FALSE)
+                    //             }
+
+                    //         } // if
+                    //     } // for(col)
+                    // } // for(row)
+
+                    // this.drawFlag = true; //Not signalling? -> Will fix later 
+                    // this.pc+=2; //Looping solution(?) -> Will fix later
+                    // break;
                 case 0xE000:
                     //Has multiple opcodes.
                     switch(opcode & 0x000f) {
