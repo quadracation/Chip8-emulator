@@ -538,3 +538,92 @@ describe('Code 0xCXNN', function(){
   });
 });
 
+// skipped key pressed case 0xE000;
+
+describe('Code 0xFX07', function(){
+  describe('Sets VX to the value of the delay timer', function(){
+    var opcode = 0xF407;
+    var X = (opcode & 0x0F00) >> 8;
+    let V = new Array(16);
+    var soundtimer;
+    V[X] = soundtimer;
+    it('Check if soundtimer is equal to VX', function(){
+      assert.equal(soundtimer,V[X]);
+    });
+  });
+});
+
+describe('Code 0xFX15', function(){
+  describe('Sets the delay timer to VX.', function(){
+    var opcode = 0xF415;
+    var X = (opcode & 0x0F00) >> 8;
+    let V = new Array(16);
+    var delaytimer;
+    V[X] = delaytimer;
+    it('Check if delaytimer is equal to VX', function(){
+      assert.equal(delaytimer,V[X]);
+    });
+  });
+});
+
+describe('Code 0xFX18', function(){
+  describe('Sets the sound timer to VX.', function(){
+    var opcode = 0xF418;
+    var X = (opcode & 0x0F00) >> 8;
+    let V = new Array(16);
+    V[X] = soundtimer;
+    it('Check if soundtimer is equal to VX', function(){
+      assert.equal(soundtimer,V[X]);
+    });
+  });
+});
+
+describe('Code 0xFX1E', function(){
+  describe('Adds VX to I', function(){
+    var opcode = 0xF41E;
+    var X = (opcode & 0x0F00) >> 8;
+    let V = new Array(16);
+    var I = 0;
+    V[4] = 3;
+    it('Check if V[X] is equal to V[4]', function(){
+      assert.equal(V[4], V[X]);
+    });
+  });
+});
+
+describe('Code 0XFX55', function(){
+  describe('Stores V0 to VX (including VX) in memory starting at address I.', function(){
+    var opcode = 0xF455;
+    var V = new Array(16);
+    var I = 0;
+    let memory = new Array(16);
+    var X = (opcode & 0x0F00) >> 8;
+    for(let idx = 0; idx <= X; idx++){
+      memory[I + idx] = V[idx];
+    }
+    it('Check if V0 to VX is equal to the memory index', function(){
+      for(let idx = 0; idx <= memory.length; idx++){
+          assert.equal(V[idx],memory[i + idx]);
+      }
+    });
+  });
+});
+
+describe('Code 0xFX65', function(){
+  describe('Fills V0 to VX (including VX) with values from memory starting at address I. ', function(){
+    var opcode = 0xF465;
+    var V = new Array(16);
+    var I = 0;
+    let memory = new Array(16);
+    var X = (opcode & 0x0F00) >> 8;
+    for(let idx = 0; idx <= X; idx++){
+      V[idx] = memory[I + idx];
+    }
+    it('Check if V0 to VX is equal to the memory index', function(){
+      for(let idx = 0; idx <= memory.length; idx++){
+          assert.equal(V[idx],memory[i + idx]);
+      }
+    });
+  });
+});
+
