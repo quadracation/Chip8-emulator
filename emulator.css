@@ -1,0 +1,25 @@
+body {
+	color: black;
+	text-align: center;
+}
+
+#wrapper {
+
+}
+
+/* For the [Memory] Scroll Box */
+#memory {
+	width : 400px;
+	height: 280px;
+
+	resize: none;
+	display: inline-block;
+
+	background-color: rgb(124, 122, 122);
+	border: 2px solid black;
+	padding: 20px;
+
+	font-family: 'Courier New', Courier, monospace;
+	color: white;
+	overflow: auto;
+}
