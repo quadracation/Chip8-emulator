@@ -9,7 +9,7 @@
 
 <div id="wrapper">
     <canvas id="chipScreen" width="640" height="320" style="border: 2px solid black"> </canvas>
-    <br><br>
+    <br><br><br>
 
     <!--ROM Loading area-->
     <!--Idea: BROWSE through the computer's files for .ch8 files. NO DROP DOWN.-->
@@ -23,18 +23,18 @@
 <!--Scripts-->
 <script src = "Chip8.js"></script>
 <script src = "visual.js"></script>
+<script src = "RomLoader.js"></script>
 <script>
     // console.log("1234 & 0xf000: " + (1234 & 0xf000));
     var cpu = new CPU();
     var canv = document.getElementById("chipScreen");
     var rend = new Renderer(canv, cpu.getHeight(), cpu.getWidth(), 10);
 
-
+    cpu.paused = true;
     cpu.randomizeMemory();
     cpu.setRenderer(rend);
     cpu.initRegisters();
     // cpu.startup();
-    cpu.cycle();
 
     var testHex = [
         0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -77,15 +77,28 @@
 
     // let idx = 0x200;
     setInterval(function() {
-        cpu.cycle();
-        let pc = cpu.getProgramCounter();
-        if(memArr[pc] > 0 ) {
-            memo.textContent += "Opcode: " + cpu.getOpcode() + "\nPC: " + pc + "\nMemory: " + memArr[pc] + "\n\n";
+        if (cpu.paused) return;
+
+        try {
+            cpu.cycle();
+            cpu.renderer.render(cpu.getDisplayArray());
+            let pc = cpu.getProgramCounter();
+            if (memArr[pc] > 0) {
+                memo.textContent += "Opcode: " + cpu.getOpcode() + "\nPC: " + pc + "\nMemory: " + memArr[pc] + "\n\n";
+            }
+            scrollToBottom();
+        } catch (ex) {
+            cpu.paused = true;
+            throw ex;
         }
-        scrollToBottom();
 
         // idx++;
-    },1000); //1 second
+    },2); //1 second
+
+    setInterval(function() {
+        cpu.updateTimers();
+    }, 1000 / 60); //60 times a second
+
     var scrollToBottom = function() {
         let height = memo.getBoundingClientRect().height;
         if (Math.abs(memo.scrollHeight - memo.scrollTop - height) < 80) {

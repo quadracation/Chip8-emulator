@@ -7,6 +7,10 @@ body {
 
 }
 
+#chipScreen {
+	background: black;
+}
+
 /* For the [Memory] Scroll Box */
 #memory {
 	width : 400px;
