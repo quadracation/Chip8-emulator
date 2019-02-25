@@ -9,16 +9,14 @@
         textarea{  /* For the [Memory] Scroll Box */
                 width : 400px;
                 height: 280px;
-            
+
                 resize: none;
                 display: inline-block;
-
                 border-color: black;
                 background-color: rgb(124, 122, 122);
                 border: 2px solid black;
                 padding-right: 10px;
                 padding: 20px;
-
                 font-family: 'Courier New', Courier, monospace;
                 color: white;
                 overflow: auto;
@@ -26,25 +24,29 @@
     </style>
 </head>
 <body>
+    <font size= "25"><marquee behavior= "Scroll" direction= "left"> TEAM 16 PRESENTS: CHIP-8 EMULATOR</marquee></font>
     <center><canvas id="chipScreen" width="640" height="320" style="border: 2px solid black"> </canvas></center>
-    
-    
+    <center><button type="button" onclick="cpu.pause()">Play/Pause</button></center>
+    <center><button type="button" onclick="cpu.reset()">Reset</button></center>
+
+
     <script src = "Chip8.js"></script>
     <script src = "visual.js"></script>
     <script>
         // console.log("1234 & 0xf000: " + (1234 & 0xf000));
         var cpu = new CPU();
         var canv = document.getElementById("chipScreen");
-        var rend = new Renderer(canv, cpu.getHeight(), cpu.getWidth(), 
+        var rend = new Renderer(canv, cpu.getHeight(), cpu.getWidth(),
                                     10);
-        
-        
+
+
         cpu.randomizeMemory();
         cpu.setRenderer(rend);
         cpu.initRegisters();
-        // cpu.startup();  
+        // cpu.startup();
         cpu.cycle();
-        
+
+
         var testHex = [ //fuck
             0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
             0x20, 0x60, 0x20, 0x20, 0x70, // 1
@@ -63,7 +65,6 @@
             0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
             0xF0, 0x80, 0xF0, 0x80, 0x80  // F
         ];
-
     // console.log(testHex[0].toString(16));//WORKS: GIVES YOU "FF"
         // var hexArr = [0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, 0x00, 0x01, 0x01, 0x01, 0x00, 0x60];
         // var hexArr = [0x01];
@@ -72,33 +73,43 @@
                 y++;
                 x = 0;
             }
-
             cpu.drawIntoDisplayArray(testHex.slice(i * 5, (i + 1) * 5), x * 6, y * 6, 5); // sprite, x, y, h
         }
-    </script> <!-- Primary CPU Activation and Display Testing (Manual) --> 
+    </script> <!-- Primary CPU Activation and Display Testing (Manual) -->
 
     <textarea id="memory"></textarea>
     <script>
         var memo = document.getElementById("memory");
         var memArr = cpu.getMemory();
-        
+
         // let idx = 0x200;
+
         setInterval(function() {
-            cpu.cycle();
-            let pc = cpu.getProgramCounter();
-            if(memArr[pc] > 0 ) {
-                memo.textContent += "Opcode: " + cpu.getOpcode() + "\nPC: " + pc + "\nMemory: " + memArr[pc] + "\n\n";
+          if (cpu.paused === true){
+          }else{
+              cpu.cycle();
+              let pc = cpu.getProgramCounter();
+              if(memArr[pc] > 0 ) {
+                  memo.textContent += "Opcode: " + cpu.getOpcode() + "\nPC: " + pc + "\nMemory: " + memArr[pc] + "\n\n";
+                }
+                scrollToBottom();
+              
             }
-            scrollToBottom();
-            
-            // idx++;
         },1000); //1 second
+
         var scrollToBottom = function() {
             let height = memo.getBoundingClientRect().height;
             if (Math.abs(memo.scrollHeight - memo.scrollTop - height) < 80) {
                 memo.scrollTop = memo.scrollHeight - height;
             }
         };
+
+        window.addEventListener('keydown', function (e){
+          var key = e.keyCode;
+          if (key === 80){
+            cpu.pause();
+          }
+        });
     </script> <!-- Memory box (: Will add more soon! -->
 
 
@@ -108,17 +119,15 @@
                 console.log("FUCK");
                 cpu.drawFlag = true;
                 // cpu.cycle();
-                
+
                 if(cpu.drawFlag == true) {
-                    
-                
+
+
                     console.log("DRAW");
                     cpu.drawOntoScreen();
                 }
             }
         }, 2000); //2 seconds
     </script> -->
-
 </body>
-
 </html>
