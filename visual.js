@@ -19,16 +19,18 @@ Renderer.prototype.clear=function(){
 Renderer.prototype.render=function(displayArray){                  //pass in our displayArray from Chip8.js --> ... = Array(64 * 32);
     let x; let y;
     this.clear();                                                  //This will display a "glitching" effect, ...
-                                                                   //...common with the CHIP-8 program. 
-    
+                                                                   //...common with the CHIP-8 program.
+
+    this.context.fillStyle = "#86dfff";                            //light blue pixels
+
     for(let i = 0; i < displayArray.length; i++){                  // [ ...EXPLAINED BELOW... ]
         x = (i % this.width) * this.scalar;                        // . . .
         y = Math.floor(i / this.width) * this.scalar;              // . . .
-        
                                                                    //Colour and fill in the pixel at the specified location
                                                                    //# R G B -> # 00 00 00; each R/G/B is 1-byte long (2 nibbles)
-        this.context.fillStyle = "#000000";                        //000000 = no reflected light -> black matter (black colour)
-        this.context.fillRect(x, y, this.scalar, this.scalar);     //fillRext(xCord, yCord, xWidth, yHeight)
+        if (displayArray[i] != 0) {
+            this.context.fillRect(x, y, this.scalar, this.scalar);     //fillRext(xCord, yCord, xWidth, yHeight)
+        }
     }
 
 };
