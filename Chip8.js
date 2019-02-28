@@ -24,9 +24,7 @@ class CPU {
         this.drawFlag      = false;                                                 //When to draw (trigger boolean)
         this.renderer      = undefined;										        
 
-        this.paused = false; 
-        this.running = true;
-
+        this.paused = true;
     } //function CONSTRUCTOR() 
 
 
@@ -38,7 +36,11 @@ class CPU {
     getRenderer()          { return this.renderer;                             }
     getOpcode()            { return this.opcode.toString(16).padStart(4, '0'); }
     getProgramCounter()    { return this.pc;                                   }
-    setRenderer(renderer)  { this.renderer = renderer;                         }                             //new Object 
+    setRenderer(renderer)  { this.renderer = renderer;                         }                             //new Object
+
+    get running() {
+        return !this.paused;
+    }
 
     updateTimers() {
         if(this.delayTimer > 0) {
@@ -118,7 +120,6 @@ class CPU {
             //Separate each hex into a binary string. Each bit of each hex index is put into the next this.display index.
             //Example: hexArr[0] = 0x96 => Binary: 10010110 => "1,0,0,1,0,1,1,0" => d[0]="1", d[1] = "0", d[2] = "0", d[3] = "0", d[4] = "1", ...
             let binary = this.Hex2Bin(hexArr[i].toString(16));
-            console.log("Binary: " + binary + ", Hex: " + hexArr[i].toString(16));//Confirmed to work 
 
             //Each row 
             for (let pixel = 0; pixel < 8; pixel++) {
@@ -138,7 +139,7 @@ class CPU {
 
 
     startup() { //Start up the program; Initializer
-        this.running = true;
+        this.pc = 0x200;
 
         let hexChars = [ //Defining the FONT Sets (79 indexes)
             0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -228,16 +229,23 @@ class CPU {
     }
 
 
+    pause(){
+        this.paused = !this.paused;
+    }
+
     cycle() { //Running the program. Initialized outside of this file in an infinite loop
+        if(this.paused !== true) {
+
 
         this.opcode = this.memory[this.pc] << 8 | this.memory[this.pc+1];
         
         //Special thanks to: ETHAN P. for these console logs
+        console.log("PC:     " + this.pc.toString(16).padStart(4, '0'));
         console.log("OpCode: " + this.opcode.toString(16).padStart(4, '0'));
         console.log("OpCode Type: " + typeof(this.opcode));
         console.log("Opcode & 0xF000: " + (this.opcode & 0xf000).toString(16).padStart(4, '0'));
-        console.log("Opcode & 0x000F: " + (this.opcode & 0x000f).toString(16).padStart(4, '0')); 
-        console.log("DrawFlag: " + this.drawFlag);
+        console.log("Opcode & 0x000F: " + (this.opcode & 0x000f).toString(16).padStart(4, '0'));
+        console.log("\n");
 
 
         //Refer to these. Let vs. var (?) Use Let for now. 
@@ -245,7 +253,8 @@ class CPU {
         let  NN = this.opcode & 0xFF;
         //skipped N (this.opcode & 0x000F) since it became less clear 
         let   X = (this.opcode & 0x0F00) >> 8; //takes out last 2 0's
-        let   Y = (this.opcode & 0x00F0) >> 4; //takes out last 0 
+        let   Y = (this.opcode & 0x00F0) >> 4; //takes out last 0
+        let   N = (this.opcode & 0x000F) >> 0; //gets last letter
         
         //Decode Opcode
         //Now that you have your this.opcode, you need to figure out which instruction set and operation you need to do.
@@ -265,10 +274,10 @@ class CPU {
                         this.pc += 2;
                         break;
                     case 0x00EE: // [00EE]: Returns from subroutine
-                        if(this.stackpointer >= 0) 
-                            this.pc = this.stack[--this.stackpointer];
+                        if(this.stackPointer >= 0) 
+                            this.pc = this.stack[--this.stackPointer] + 2;
                         else
-                            throw new Error("Invalid stackpointer: -1");
+                            throw new Error("Invalid stackPointer: -1");
                         break;
                     default:
                         //No such code:
@@ -282,14 +291,15 @@ class CPU {
                 this.pc = NNN;
                 break;
             case 0x2000: //[2NNN]: Calls subroutine(fx) at address NNN.
-                this.stack[this.stackpointer] = this.pc; //Place it in stack to unwind later
-                this.stackpointer++; //increment stack last position.
+                this.stack[this.stackPointer] = this.pc; //Place it in stack to unwind later
+                this.stackPointer++; //increment stack last position.
                 this.pc = NNN; //again, first nibble is not needed.
+
                 break;
             case 0x3000: // [3XNN]: If VX == NN, then skip 1 operation. 
-                //program counter(pc) is the one that tracks the instructions in memory. 
+                //program counter(pc) is the one that tracks the instructions in memory.
                 if( this.V[X] === NN) 
-                    this.this.pc += 4; //increment to the next 2 bytes (next this.opcode) 
+                    this.pc += 4; //increment to the next 2 bytes (next this.opcode)
                 else  
                     this.pc +=2;
                 break;
@@ -417,24 +427,22 @@ class CPU {
                 break;
 
             case 0xD000: // [DXYN]: Draw pixels onto screen in location (Y,X) with height N. 1<=Height<=F; Max Width = 8bits (1byte)
-                let pixel = 0;
-                let height = this.opcode & 0x000F;
-                        
+                let spriteAddr = this.I;
                 this.V[0xF] = 0;
-                for (let yline = 0; yline < height; yline++)
-                {
-                    pixel = this.display[this.I + yline];
-                    for(let xline = 0; xline < 8; xline++)
-                    {
-                        if((pixel & (0x80 >> xline)) != 0)
-                        {
-                            if(this.display[(this.X + xline + ((this.Y + yline) * 64))] == 1)
-                            {
-                                this.V[0xF] = 1;                                    
-                            }
-                            this.display[this.X + xline + ((this.Y + yline) * 64)] ^= 1;
-                        }
+                let indX = this.V[X];
+                let indY = this.V[Y];
+
+                for (let spriteY = 0; spriteY < N; spriteY++) {
+                    let drawX = indX % this.displayWidth;
+                    let drawY = indY % this.displayHeight;
+                    for (let spriteX = 0; spriteX < 8; spriteX++) {
+                        let idx = ((drawY + spriteY) * this.displayWidth) + drawX + spriteX;
+                        let on = (this.memory[spriteAddr] & (1 << (7 - spriteX))) > 0 ? 1 : 0;
+                        if (on == 1 && this.display[idx] == 1) this.V[0xF] = 1;
+                        this.display[idx] ^= on;
                     }
+
+                    spriteAddr++;
                 }
                             
                 this.drawFlag = true;	
@@ -505,11 +513,18 @@ class CPU {
                 switch(this.opcode & 0x000f) {
                     case 0x000E: // [EX9E]: Skip next instruction if the key stored in this.V[X] is pressed.
                         // if(this.keys[this.V[X]]) then this.pc += 2	
-                        this.pc += 2;
+                        // if(this.keys[this.V[X]]) then this.pc += 2
+                        if (this.keys[this.V[X]]){
+                            this.pc += 4;
+                        }
+                        else this.pc += 2;
                         break;
                     case 0x0001: // [EXA1]: Skip next instruction if the key stored in this.V[X] is NOT pressed.
                         // if(!this.keys[this.V[X]]) then this.pc += 2
-                        this.pc += 2;
+                        if (!this.keys[this.V[X]]){
+                            this.pc += 4;
+                        }
+                        else this.pc += 2;
                         break;
                     default:
                         //No such code:
@@ -523,7 +538,8 @@ class CPU {
                 //Lots of mutliple this.opcodes.
                 switch(this.opcode & 0x00FF) {
                     case 0x0007: // [FX07]: Set this.V.[X] to the value of the delay timer.
-                        this.V[X] = this.delaytimer;
+                        this.V[X] = this.delayTimer;
+                        this.pc +=2;
                         break;
                     case 0x000A: // [FX0A]: A key press is awaited. Once pressed store in this.V[X]. Pls send Halp.
                         //Stop all instructions until a key is pressed, then store the key value in Register x
@@ -538,48 +554,57 @@ class CPU {
                         }   
 
                         if(!keyPressed) return; //get out of this function
-                        else this.pc +=2;
+                        this.pc +=2;
                         break;
-                    case 0x0015: // [FX15]: Set this.delaytimer to this.V[X].
-                        this.delaytimer = this.V[X];
+                    case 0x0015: // [FX15]: Set this.delayTimer to this.V[X].
+                        this.delayTimer = this.V[X];
+                        this.pc += 2;
                         break;
                     case 0x0018: // [FX18]: Set this.soundertimer to this.V[X].
                         this.soundtimer = this.V[X];
+                        this.pc += 2;
                         break;
                     case 0x001E: // [FX1E]: Add VX to I. 
                         this.I = (this.I + this.V[X]);
+                        this.pc += 2;
                         break;
                     case 0x0029: // [FX29]: Set I to location of spirte for character in this.V[X]. Characters 0-F (hexdex) represented by a 4x5 font.
                         this.I = this.V[X] * 5;
+                        this.pc += 2;
                         break;
                     case 0x0033: // [FX33]: Stores the binary-coded decimal representation of VX
                         //working backwards: Get ones, tens, then hundreds respectively. 
                         let val = this.V[X];
-                        this.memory[I+2] = val%10;
+                        this.memory[this.I+2] = val%10;
                         val /= 10;
-                        this.memory[I+1] = val%10;
+                        this.memory[this.I+1] = val%10;
                         val /= 10;
-                        this.memory[I] = val%10;
+                        this.memory[this.I] = val%10;
+                        this.pc += 2;
                         break;
                     case 0x0055: //stores registers V0 to VX in memory from location I
                         for (var i=0; i<=X;i++){
                             this.memory[this.I+i]=this.V[i];
                         }
+                        this.pc += 2;
                         break;
                     case 0x0065:
                         for (var i=0; i<=X; i++){
                             this.V[i] = this.memory[this.I+i];
                         }
+                        this.pc += 2;
                         break;
                 
                     default:
                         //No such code:
-                        console.log("Operation Code not Supported.");
-                        // throw new Error("User inputted"+ this.opcode.toString(16)+",Terminating");
+                        console.log("ERROR: Unknown Opcode: " + this.opcode);
                         this.pc+=2;
                         break;
                 
                     }
+
+                    break;
+
                 default:
                     console.log("ERROR: Unknown Opcode: " + this.opcode);
                     this.pc += 2;
@@ -587,6 +612,7 @@ class CPU {
                 
                     
             } //switch{...}
+        }
         
     }//function CYCLE()
         
