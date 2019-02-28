@@ -8,22 +8,30 @@
 <body>
 
 <div id="wrapper">
-    
+    <!--Title Display-->	
+    <font size= "25"><marquee behavior= "Scroll" direction= "left"> TEAM 16 PRESENTS: CHIP-8 EMULATOR</marquee></font>
+    <br><br>
+	
     <!--ROM Loading area-->
     <!--Idea: BROWSE through the computer's files for .ch8 files. NO DROP DOWN.-->
     <br><br><br>
     <input id="rom" type="file" /> <!-- Input Tag: Input Tag name: ROM.Input Type: file selection/usage -->
     <br><br>
+	
+    <!--CHIP-8 Screen-->
     <canvas id="chipScreen" width="640" height="320" style="border: 2px solid black"> </canvas>
     <br><br>
+    <!--Buttons-->	
     <center><button type="button" onclick="cpu.pause()">Play/Pause</button></center>
     <center><button type="button" onclick="resetScreen()">Reset</button></center>
     <br><br><br>
 
     <!--Memory Box Area -->
     <textarea id="memory"></textarea>
-</div>
+</div> <!--DIV: Wrapper-->
 
+	
+	
 <!--Scripts-->
 <script src = "Chip8.js"></script>
 <script src = "visual.js"></script>
