@@ -589,7 +589,7 @@ The test file contains main functional testing to ensure that regular operations
 
 <br>
 
-**<h3><font size = "5">Release 1 </font></h3>**
+**<h3><font size = "5">Release 1 & 2 </font></h3>**
 
 -  [1] L. Muller, “How to write an emulator (CHIP-8 interpreter),” in Multigesture, -[Online], availible at -http://www.multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/, -2011.
 
