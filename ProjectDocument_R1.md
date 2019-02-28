@@ -294,7 +294,7 @@ but are not restricted from working with other roles outside of their own.
 | **Linh**                           | &ensp;&ensp;&ensp;&ensp;&ensp;Software Systems                     | &ensp;&ensp;&ensp;&ensp;&ensp;Project Manager / Project Document Editor / Programmer / Tester / Tool Supervisor|
 | **Ian**                            | &ensp;&ensp;&ensp;&ensp;&ensp;Software Systems                     | &ensp;&ensp;&ensp;&ensp;&ensp;Programmer / Presenter (Rep) / Tester / Tool Developer                        | 
 | **Ben**                            | &ensp;&ensp;&ensp;&ensp;&ensp;Software Systems                     | &ensp;&ensp;&ensp;&ensp;&ensp;Programmer / Presenter (Rep) / Scriptwriter / Game Developer                   | 
-| **Wassim**                         | &ensp;&ensp;&ensp;&ensp;&ensp;Computer Science                     | &ensp;&ensp;&ensp;&ensp;&ensp;Programmer / Presenter (Rep) / Tester / Game Developer                      |
+| **Wassim**                         | &ensp;&ensp;&ensp;&ensp;&ensp;Computer Science                     | &ensp;&ensp;&ensp;&ensp;&ensp;Programmer / Presenter (Rep) / Tester / Game Developer                                 |
 | **William**                       | &ensp;&ensp;&ensp;&ensp;&ensp;Computer Science                     | &ensp;&ensp;&ensp;&ensp;&ensp;Programmer / Presentation Manager / Tool Developer                             |
 | 
 
@@ -452,10 +452,6 @@ Notice that the projected numbers on each bar of the provided graphs overlaps th
 | **Current Status:** SLIGHTLY BEHIND   | 
 |                                       |
 
-|                                       |
-| ------------------------------------- |
-| **>New Schedule is under Construction as of February 5th**   | 
-|                                       |
 
 </font> 
 <br>
