@@ -1,0 +1,91 @@
+body {
+	color: black;
+	text-align: center;
+}
+
+input[type="file"] {
+	width: 74px;
+}
+
+input[type="color"] {
+	border: none;
+	width: 70px	;
+	height: 45px;
+}
+
+table {
+	width: 100%;
+
+	align-self: stretch;
+
+	border-collapse: collapse;
+
+	padding: 1px;
+}
+th {
+	border: 1px solid #1f1f1f;
+	text-align: center;
+	color: white;
+	padding: 10px;
+}
+
+.buttonGroup {
+	display: flex;
+	align-items: start;
+	justify-content: space-between;
+	white-space: nowrap;
+
+}
+
+.buttonGroup .button {
+	background-color: #353434;
+	border: 1px solid #353434;
+	color: white;
+	padding: 15px;
+
+	text-align: center;
+
+	display: flex-box;
+	cursor: pointer;
+}
+.buttonGroup button:not(:last-child) {
+	border-right: none;
+}
+.buttonGroup button:hover {
+	background-color: #525151;
+}
+
+#wrapper{
+	background: #525151;
+}
+
+#chipScreen {
+	background: black;
+}
+
+#mainContainer {
+	display: flex;
+	justify-content: center;
+
+}
+#registers {
+	background: #353434;
+}
+
+/* For the [Memory] Scroll Box */
+#memory{
+	background: #353434;
+	width : 200px;
+
+	resize: none;
+
+	align-self: stretch;
+
+	/* background-color: black; */
+	border: 2px solid #353434;
+	padding: 20px;
+
+	font-family: 'Courier New', Courier, monospace;
+	color: white;
+	overflow: auto;
+}
