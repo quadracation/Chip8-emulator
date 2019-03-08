@@ -1,0 +1,183 @@
+: leftpaddle 0x80 0x80 0x80 0x80 0x80 0x80 0x80 0x80
+: rightpaddle 0x80 0x80 0x80 0x80 0x80 0x80 0x80 0x80
+: ball   0x80 0x0 0x0 0x0 0x0 0x0 0x0 0x0
+: playerone 0x00 0x00 0x18 0x28 0x48 0x08 0x08 0x08 0x08 0x08 0x08 0x08 0x7E 0x00 0x00
+: playertwo 0x00 0x00 0x38 0x6C 0x04 0x04 0x0C 0x08 0x18 0x10 0x30 0x7E 0x00 0x00 0x00
+: doubleu 0x00 0x00 0x00 0x81 0x81 0x81 0x81 0x91 0xB9 0xAD 0xE7 0xC2 0x00 0x00 0x00
+: eye 0x00 0x00 0x10 0x10 0x10 0x10 0x10 0x10 0x10 0x10 0x10 0x10 0x10 0x00 0x00
+: enn 0x00 0x00 0x00 0xC1 0xE1 0xB1 0x99 0x89 0x85 0x87 0x83 0x81 0x00 0x00 0x00
+: ess 0x00 0x00 0x7F 0xC0 0x80 0x80 0x60 0x3E 0x02 0x01 0xC3 0x66 0x3C 0x00 0x00
+: pee 0x00 0x00 0x00 0x7E 0x42 0x42 0x7E 0x40 0x40 0x40 0x40 0x40 0x40 0x00 0x00
+
+
+:alias leftscore v3
+:alias rightscore v4
+:alias leftx	ve
+:alias lefty  vd
+:alias rightx v8
+:alias righty v7
+:alias ballx vb
+:alias bally va
+:alias ballfire v9
+:alias balldirection v5
+
+:const MOVE_ST 1
+:const MOVE_UP 2
+:const MOVE_DN 3
+
+
+: moveball
+	v1 := ballx
+  v2 := bally
+
+  v1 += balldirection
+
+  #ball angle
+  if ballfire == MOVE_UP then v2 += -1
+  if ballfire == MOVE_DN then v2 += 1
+
+  #bounce off top and bottom
+  if v2 == 1 then ballfire := MOVE_DN
+  if v2 == 30 then ballfire := MOVE_UP
+
+  #despawn on left edge and update score
+  if v1 == 0 then ballfire := 0
+  if ballfire == 0 then rightscore += 1
+  if ballfire == 0 then jump endround
+
+  #despawn on right edge and update score
+  if v1 == 63 then ballfire := 1
+  if ballfire == 1 then leftscore += 1
+  if ballfire == 1 then jump endround
+
+  #movement
+  i := ball
+  sprite ballx bally 1
+  ballx := v1
+  bally := v2
+  i := ball
+  sprite ballx bally 1
+;
+
+: setscores
+	#display left score
+	v0 := 20
+  v1 := 3
+  i := hex leftscore
+  sprite v0 v1 5
+
+  #display right score
+  v0 := 39
+  v1 := 3
+  i := hex rightscore
+  sprite v0 v1 5
+;
+
+: endround
+	clear
+  v0 := 64
+  buzzer := v0
+  delay := v0
+  loop
+  	v0 := delay
+    if v0 != 0 then
+  again
+  jump main
+;
+
+: moveleftpaddle
+	v1 := leftx
+  v2 := lefty
+
+  v0 := 1
+  if v0 key then v2 += -1
+  v0 := 7
+  if v0 key then v2 += 1
+
+  i := leftpaddle
+  sprite leftx lefty 7
+  leftx := v1
+  lefty := v2
+  i := leftpaddle
+  sprite leftx lefty 7
+;
+
+: moverightpaddle
+	v1 := rightx
+  v2 := righty
+
+  v0 := 0xC
+  if v0 key then v2 += -1
+  v0 := 0xE
+  if v0 key then v2 += 1
+
+  i := rightpaddle
+  sprite rightx righty 7
+  rightx := v1
+  righty := v2
+  i := rightpaddle
+  sprite rightx righty 7
+;
+
+: winneris
+	clear
+	v0 := 2
+  v1 := 14
+  v6 := leftscore
+  vc := rightscore
+
+  i := pee
+  sprite v0 v1 15
+  v0 += 7
+
+  if v6 > vc then i := playerone
+  if vc > v6 then i := playertwo
+  sprite v0 v1 15
+  v0 += 15
+  i := doubleu
+  sprite v0 v1 15
+  v0 += 10
+  i := eye
+  sprite v0 v1 15
+  v0 += 10
+  i := enn
+  sprite v0 v1 15
+  v0 += 10
+  i := ess
+  sprite v0 v1 15
+;
+
+
+: main
+	leftx := 1
+  lefty := 12
+
+  rightx := 62
+  righty := 12
+
+	ballx := 31
+  bally := 14
+  ballfire := MOVE_DN
+  balldirection := 1
+
+  i := ball
+  sprite ballx bally 1
+  i := leftpaddle
+  sprite leftx lefty 7
+  i := rightpaddle
+  sprite rightx righty 7
+
+  setscores
+
+  loop
+  	while leftscore != 1
+    while rightscore != 1
+  	moveleftpaddle
+    if vf != 0 then balldirection := 1
+    moverightpaddle
+    if vf != 0 then balldirection := -1
+    moveball
+  again
+
+  winneris
+;
