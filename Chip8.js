@@ -25,21 +25,30 @@ class CPU {
         this.renderer      = undefined;										        
 
         this.paused = true;
+        this.stepForward = false;
+        this.hasROM = false;
     } //function CONSTRUCTOR() 
 
 
     // GETTERS & SETTERS (inline & small)
     getDisplayArray()      { return this.display;                              }
     getMemory()            { return this.memory;                               }
+    getRegisterItem(i)     { return this.V[i];                                 }
     getWidth()             { return this.displayWidth;                         }
     getHeight()            { return this.displayHeight;                        }
     getRenderer()          { return this.renderer;                             }
     getOpcode()            { return this.opcode.toString(16).padStart(4, '0'); }
     getProgramCounter()    { return this.pc;                                   }
     setRenderer(renderer)  { this.renderer = renderer;                         }                             //new Object
+    setStepForward(bool)   { this.stepForward = bool;                          }
 
-    get running() {
-        return !this.paused;
+    get paused() {
+        // Seriously guys, please be consistent.
+        return this._isPaused; 
+    }
+
+    set paused(pause) {
+        this._isPaused = pause;
     }
 
     updateTimers() {
@@ -102,14 +111,6 @@ class CPU {
             memory[i + 0x200] = gameName[i]; 
         }
     }
-
-    // loadIntoDisplayArray(arr) {
-    //     for(let i = 0; i < arr.length; i++) {
-    //         this.display[i] = arr[i];
-    //         console.log("Display["+i+"]: " + arr[i])
-    //     }
-    //     // this.drawFlag = true;
-    // }
 
     Hex2Bin(hex) {
         return parseInt(hex, 16).toString(2).padStart(8, '0');
@@ -201,23 +202,6 @@ class CPU {
         this.startup();
 
     } //function RESET()
-
-    //DO NOT DELETE THIS. THIS *WILL* BE USED.
-    // emulate() {
-    //     this.reset();
-        
-    //     //loadGame()....
-
-    //     for(;;) {
-    //         this.cycle();
-
-    //         if(this.drawFlag === true) {
-    //             drawOntoScreen();
-    //         }
-
-    //         //Get User Input through Keys
-    //     }
-    // }
     
     drawOntoScreen() {
         //<somehow> load all HEX values from the .ch8 file
@@ -234,19 +218,9 @@ class CPU {
     }
 
     cycle() { //Running the program. Initialized outside of this file in an infinite loop
-        if(this.paused !== true) {
-
+        if(this.paused !== true || this.stepForward === true) {
 
         this.opcode = this.memory[this.pc] << 8 | this.memory[this.pc+1];
-        
-        //Special thanks to: ETHAN P. for these console logs
-        console.log("PC:     " + this.pc.toString(16).padStart(4, '0'));
-        console.log("OpCode: " + this.opcode.toString(16).padStart(4, '0'));
-        console.log("OpCode Type: " + typeof(this.opcode));
-        console.log("Opcode & 0xF000: " + (this.opcode & 0xf000).toString(16).padStart(4, '0'));
-        console.log("Opcode & 0x000F: " + (this.opcode & 0x000f).toString(16).padStart(4, '0'));
-        console.log("\n");
-
 
         //Refer to these. Let vs. var (?) Use Let for now. 
         let NNN = this.opcode & 0xFFF;
@@ -449,65 +423,6 @@ class CPU {
             
                 this.pc += 2;
                 break;
-
-
-
-
-                //Similar as above. Works the same. KEEP
-                // let heightN = this.opcode & 0x000F;
-                // let pixel = 0;
-                // this.V[0xF] = 0;
-
-                // for(let row = 0; row < heightN; row++) {
-                //     pixel = this.memory[this.I + row];
-                //     for(let col = 0; col < 8; col++) {
-                //         if( (pixel & (0x80 >> col)) != 0 ) {
-                //             if(this.display[ (this.X + col + ((this.Y + row)*64)) ]) {
-                //                 this.V[0xF] = 1;
-                //             }
-                //             this.display[ this.X + col + ((this.Y + row)*64) ] ^= 1;
-                //         }
-                //     }
-                // }
-                // this.drawFlag = true;
-                // this.pc += 2;
-                // //Courtesy of multigesture.net on How to make a Chip8 Interpreter
-                // break;
-
-
-
-                // // Invert the bit value (pixel shade) upon collision (you check ful 15x8 sprite).
-                // //Since Javascript doesn't really have a preference between Column vs. Row Ordering, we assume (Y,X) and not (X,Y).
-                // //i.e., Y=x-axis(col), X=y-axis(row). 
-                // let xCoord = this.V[X];
-                // let yCoord = this.V[Y];
-                // let pixHeight = this.V[this.opcode&0x000f];
-
-                // //VF is set to 1 when there is a pixel Collision; 0 when there is not. i.e., VF = 0 by default.
-                // this.V[0xF] = 0;
-                // //Parsing through your display array, check to see if the requested pixel location is 1 and the existing area is 1.
-                // for(let row = 0; row < pixHeight; row++) { //[...][Y]
-                //     //Pixel: Start in memory at location I. Parsing through the rows, so I+i
-                //     pixel = memory[I + row]; 
-                //     //[X][...]
-                //     for(let col = 0; col < 8; j++) { //Check through the max width (1-byte). Chip8 images are full sprites of 15x8 pixels. 
-                //         //Check if the pixel and the row collide (a^b, a=b -> FALSE). 
-                //         //Do this by having pixel AND with (8-bit binary string >> current(i)) be checked for 1 (1^1 = FALSE) -> VFflag.
-                //         if((pixel & 0x80) == 1) { //If already drawn somewhere. 1 here is 'a' in a^b
-                //             //If the FILLED area (think of area formula) of the current display field is still 1(b)
-                //             //a^b, a=b=1 -> FALSE. Flag triggered. We're using locations via bit addition. Ask for more info!
-                //             if( this.setPixel(xCoord+col, yCoord+ row)){ 
-                //                 //If (X + xDisplacement, Y + yDisplacement * fillWidth(64)) == filled (1):
-                //                 this.V[0xF] = 1; // Set flag if 1^1 (FALSE)
-                //             }
-
-                //         } // if
-                //     } // for(col)
-                // } // for(row)
-
-                // this.drawFlag = true; //Not signalling? -> Will fix later 
-                // this.pc+=2; //Looping solution(?) -> Will fix later
-                // break;
             case 0xE000:
                 //Has multiple this.opcodes.
                 switch(this.opcode & 0x000f) {
