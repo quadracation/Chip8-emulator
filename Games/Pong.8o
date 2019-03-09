@@ -37,8 +37,8 @@
   if ballfire == MOVE_DN then v2 += 1
 
   #bounce off top and bottom
-  if v2 == 1 then ballfire := MOVE_DN
-  if v2 == 30 then ballfire := MOVE_UP
+  if v2 == 0 then ballfire := MOVE_DN
+  if v2 == 31 then ballfire := MOVE_UP
 
   #despawn on left edge and update score
   if v1 == 0 then ballfire := 0
@@ -170,8 +170,8 @@
   setscores
 
   loop
-  	while leftscore != 1
-    while rightscore != 1
+  	while leftscore != 6
+    while rightscore != 6
   	moveleftpaddle
     if vf != 0 then balldirection := 1
     moverightpaddle
