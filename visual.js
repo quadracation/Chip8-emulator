@@ -1,4 +1,4 @@
-var Renderer= function(canvas, givenH, givenW, cellScalar){
+var Renderer= function(canvas, givenH, givenW, cellScalar, BGclr, FGclr){
     this.context = canvas.getContext("2d");                      //setting up our drawing plane
     this.canvas  = canvas;                                       //linking our current canvas to the used canvas
     
@@ -6,6 +6,9 @@ var Renderer= function(canvas, givenH, givenW, cellScalar){
     this.width   = givenW;                                       //dimensions: Width property
         
     this.scalar  = cellScalar;                                   //1px is too small. Used a scalar defined in index.html
+
+    this.BGColour = BGclr; //String input "#aabbccdd"
+    this.FGColour = FGclr;
     
 };
 
@@ -15,13 +18,19 @@ Renderer.prototype.clear=function(){
                            this.height*this.scalar);             //Clears entire columns (wipe)
 };
 
+Renderer.prototype.setPixelColour_BG=function(clr, chip) {
+    this.BGColour = clr;
+    chip.setRenderer(this);
+};
+Renderer.prototype.setPixelColour_FG=function(clr, chip) {
+    this.FGColour = clr;
+    chip.setRenderer(this);
+};
 
 Renderer.prototype.render=function(displayArray){                  //pass in our displayArray from Chip8.js --> ... = Array(64 * 32);
     let x; let y;
     this.clear();                                                  //This will display a "glitching" effect, ...
                                                                    //...common with the CHIP-8 program.
-
-    this.context.fillStyle = "#86dfff";                            //light blue pixels
 
     for(let i = 0; i < displayArray.length; i++){                  // [ ...EXPLAINED BELOW... ]
         x = (i % this.width) * this.scalar;                        // . . .
@@ -29,7 +38,13 @@ Renderer.prototype.render=function(displayArray){                  //pass in our
                                                                    //Colour and fill in the pixel at the specified location
                                                                    //# R G B -> # 00 00 00; each R/G/B is 1-byte long (2 nibbles)
         if (displayArray[i] != 0) {
+            this.context.fillStyle = this.BGColour;                            //light blue pixels
             this.context.fillRect(x, y, this.scalar, this.scalar);     //fillRext(xCord, yCord, xWidth, yHeight)
+        }
+        else {
+            this.context.fillStyle = this.FGColour;                            //light blue pixels
+            this.context.fillRect(x, y, this.scalar, this.scalar);     //fillRext(xCord, yCord, xWidth, yHeight)
+
         }
     }
 
