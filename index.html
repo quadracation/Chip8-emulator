@@ -1,119 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- =================================================================================================================== -->	
     <meta charset="utf-8"/>
     <title>[CMPT-276]: CHIP-8 Emulator</title>
-    <link rel="stylesheet" href="emulator.css">
+    <link rel="stylesheet" href="emulator.css"> 
+    <!-- =================================================================================================================== -->	
+<style id="glowy"></style>
 </head>
+
 <body>
-
-<div id="wrapper">
-    <!--Title Display-->	
-    <font size= "25"><marquee behavior= "Scroll" direction= "left"> TEAM 16 PRESENTS: CHIP-8 EMULATOR</marquee></font>
+<!-- =================================================================================================================== -->	
+<!--Title Display-->	
+<div>
+    <img src="Logo.png" alt="Team#16" width="100" id="logo">
     <br><br>
-	
-    <!--ROM Loading area-->
-    <!--Idea: BROWSE through the computer's files for .ch8 files. NO DROP DOWN.-->
+    <marquee id="bleh" behavior= "Scroll" direction= "left"><div>Team #16 Presents: CHIP-8 Emulator</div></marquee>
+</div>
+<br>
+<div id="wrapper">	
+    <div class="buttonGroup">    
+            <!--Buttons-->	
+            <div>
+                    <!--ROM Loading area-->
+                <!--Idea: BROWSE through the computer's files for .ch8 files. NO DROP DOWN.-->
+                <input id="rom" type="file" class="button"/> <!--Input Tag: Input Tag name: ROM.Input Type: file selection/usage-->
+            </div>
+            <div>
+                <!--Buttons: Pause/Reset-->
+                <button class="button" style="float:left" onclick="cpu.pause()">PLAY/PAUSE</button>
+                <button class="button" style="float:left" onclick="resetScreen()">RESET</button>
+                <button class="button" style="float:left" onclick="stepForward()">STEP FORWARD</button>
+            </div>   
+            <div>
+                <!--Colour Picker-->
+                <input type="color" style="float: right" class="button" id="colourPicker_BG" onchange="setPixelColour_BG()"> <!--No ending tag-->
+                <input type="color"  class="button" id="colourPicker_FG" onchange="setPixelColour_FG()"> <!--No ending tag-->
+            </div>
+    </div>
     <br><br><br>
-    <input id="rom" type="file" /> <!-- Input Tag: Input Tag name: ROM.Input Type: file selection/usage -->
-    <br><br>
-	
-    <!--CHIP-8 Screen-->
-    <canvas id="chipScreen" width="640" height="320" style="border: 2px solid black"> </canvas>
-    <br><br>
-    <!--Buttons-->	
-    <center><button type="button" onclick="cpu.pause()">Play/Pause</button></center>
-    <center><button type="button" onclick="resetScreen()">Reset</button></center>
-    <br><br><br>
+    
+    <div style="align-content: center">
+            <table id="registers">
+                <tr>
+                    <th id="reg0"></th>
+                    <th id="reg1"></th>
+                    <th id="reg2"></th>
+                    <th id="reg3"></th>
+                    <th id="reg4"></th>
+                    <th id="reg5"></th>
+                    <th id="reg6"></th>
+                    <th id="reg7"></th>
+                    <th id="reg8"></th>
+                    <th id="reg9"></th>
+                    <th id="reg10"></th>
+                    <th id="reg11"></th>
+                    <th id="reg12"></th>
+                    <th id="reg13"></th>
+                    <th id="reg14"></th>
+                    <th id="reg15"></th>
+                </tr>
+                
+            </table>
+    </div>
+    
+    <div id="mainContainer" style="align-content: center">
+        <!--CHIP-8 Screen-->
+        <canvas id="chipScreen" width="1280" height="640" style="border: 1px solid #353434"> </canvas><!--Register Box Area -->
+        <br>
+        
+        <!--Memory Box Area -->
+        <textarea id="memory" readonly></textarea>
+    </div>
+    
 
-    <!--Memory Box Area -->
-    <textarea id="memory"></textarea>
+    <br><br><br><br><br>
+
 </div> <!--DIV: Wrapper-->
 
-	
+<!-- =================================================================================================================== -->	
 	
 <!--Scripts-->
 <script src = "Chip8.js"></script>
 <script src = "visual.js"></script>
 <script src = "RomLoader.js"></script>
-<script>
-    // console.log("1234 & 0xf000: " + (1234 & 0xf000));
-    var cpu = new CPU();
-    var canv = document.getElementById("chipScreen");
-    var rend = new Renderer(canv, cpu.getHeight(), cpu.getWidth(), 10);
 
+<script>    
+ 
+    // console.log("1234 & 0xf000: " + (1234 & 0xf000));
+    var cpu = new CPU(); 
+    var canv = document.getElementById("chipScreen");
+    let SCALE = 20;
+    var rend = new Renderer(canv, cpu.getHeight(), cpu.getWidth(), SCALE, 
+                            document.getElementById("colourPicker_BG").value,
+                            document.getElementById("colourPicker_FG").value);
     cpu.paused = true;
     cpu.randomizeMemory();
     cpu.setRenderer(rend);
     cpu.initRegisters();
-    // cpu.startup();
 
-    var testHex = [
-        0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
-        0x20, 0x60, 0x20, 0x20, 0x70, // 1
-        0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
-        0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
-        0x90, 0x90, 0xF0, 0x10, 0x10, // 4
-        0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
-        0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
-        0xF0, 0x10, 0x20, 0x40, 0x40, // 7
-        0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
-        0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
-        0xF0, 0x90, 0xF0, 0x90, 0x90, // A
-        0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
-        0xF0, 0x80, 0x80, 0x80, 0xF0, // C
-        0xE0, 0x90, 0x90, 0x90, 0xE0, // D
-        0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
-        0xF0, 0x80, 0xF0, 0x80, 0x80  // F
-    ];
-
-    // console.log(testHex[0].toString(16));//WORKS: GIVES YOU "FF"
-    // var hexArr = [0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, 0x00, 0x01, 0x01, 0x01, 0x00, 0x60];
-    // var hexArr = [0x01];
-    //Keep this for reference on later usages. To be used in future for other loaded arrays. To be turned into a function later. Visual/Chip8
-    for (let i = 0, x = 0, y = 0; i < testHex.length / 5; i++, x++) {
-        if (x >= 8) {
-            y++;
-            x = 0;
-        }
-
-        cpu.drawIntoDisplayArray(testHex.slice(i * 5, (i + 1) * 5), x * 6, y * 6, 5); // sprite, x, y, h
-    }
+   
 </script> <!-- Primary CPU Activation and Display Testing (Manual) -->
 
 
+<!-- =================================================================================================================== -->	
 <!-- Memory box (: Will add more soon! -->
 <script>
-    var memo = document.getElementById("memory");
-    var memArr = cpu.getMemory();
+    let memo = document.getElementById("memory");
+    let memArr = cpu.getMemory();
 
-    // let idx = 0x200;
+    cpu.readjustRegisters();
+    var updateRegisters = function() {
+        reg0.innerText  = "V0:\n" + cpu.getRegisterItem(0);
+        reg1.innerText  = "V1:\n" + cpu.getRegisterItem(1);
+        reg2.innerText  = "V2:\n" + cpu.getRegisterItem(2);
+        reg3.innerText  = "V3:\n" + cpu.getRegisterItem(3);
+        reg4.innerText  = "V4:\n" + cpu.getRegisterItem(4);
+        reg5.innerText  = "V5:\n" + cpu.getRegisterItem(5);
+        reg6.innerText  = "V6:\n" + cpu.getRegisterItem(6);
+        reg7.innerText  = "V7:\n" + cpu.getRegisterItem(7);
+        reg8.innerText  = "V8:\n" + cpu.getRegisterItem(8);
+        reg9.innerText  = "V9:\n" + cpu.getRegisterItem(9);
+        reg10.innerText = "VA:\n" + cpu.getRegisterItem(10);
+        reg11.innerText = "VB:\n" + cpu.getRegisterItem(11);
+        reg12.innerText = "VC:\n" + cpu.getRegisterItem(12);
+        reg13.innerText = "VD:\n" + cpu.getRegisterItem(13);
+        reg14.innerText = "VE:\n" + cpu.getRegisterItem(14);
+        reg15.innerText = "VF:\n" + cpu.getRegisterItem(15);
+    };    
+    updateRegisters();
+    
+
+   let count = 0;
+    
     setInterval(function() {
-        if (cpu.paused) return;
-
-        try {
-            cpu.cycle();
-            cpu.renderer.render(cpu.getDisplayArray());
-            let pc = cpu.getProgramCounter();
-            if (memArr[pc] > 0) {
-                memo.textContent += "Opcode: " + cpu.getOpcode() + "\nPC: " + pc + "\nMemory: " + memArr[pc] + "\n\n";
+            try {
+                if(cpu.hasROM && count < 200) {
+                    cpu.cycle();
+                    cpu.renderer.render(cpu.getDisplayArray());
+                    let pc = cpu.getProgramCounter();
+                    if(cpu.getOpcode() > 0 && (!cpu.paused || cpu.stepForward)) {
+                        if(cpu.stepForward) cpu.stepForward = false;
+                        memo.textContent += "Opcode: " + cpu.getOpcode() + "\nPC: " + pc +"\n\n";
+                        count++;
+                    }
+                    scrollToBottom();
+                    updateRegisters();
+                }
+                else {
+                    memo.innerText = "";
+                    count = 0;
+                }
+                
+            } catch (ex) {
+                cpu.paused = true;
+                throw ex;
             }
-            scrollToBottom();
-        } catch (ex) {
-            cpu.paused = true;
-            throw ex;
-        }
+        },2); // 500 times a second
 
-        // idx++;
-    },2); //1 second
+    //<!-- =================================================================================================================== -->	
 
     setInterval(function() {
         cpu.updateTimers();
-    }, 2000 / 60); //60 times a second
+    }, 1000 / 60); //60 times a second
+
+
+
+    var setPixelColour_BG = function() {
+        let clr = document.getElementById("colourPicker_BG").value;
+        cpu.renderer.setPixelColour_BG(clr, cpu);
+        document.getElementById("glowy").innerText = "body{--fg:" + clr + ";}";
+    };
+    var setPixelColour_FG = function() {
+        let clr = document.getElementById("colourPicker_FG").value;
+        cpu.renderer.setPixelColour_FG(clr, cpu);
+    };
+
+    var stepForward = function() {
+        if(cpu.paused === true) {
+            cpu.stepForward = true; 
+        }
+    };
 
     var scrollToBottom = function() {
         let height = memo.getBoundingClientRect().height;
-        if (Math.abs(memo.scrollHeight - memo.scrollTop - height) < 80) {
+        if (Math.abs(memo.scrollHeight - memo.scrollTop - height) < 70) {
             memo.scrollTop = memo.scrollHeight - height;
         }
     };
@@ -129,24 +200,75 @@
         cpu.reset();
         memo.textContent = "";
     }
+
+    let pickerBG = document.getElementById('colourPicker_BG');
+    let pickerFG = document.getElementById('colourPicker_FG');
+    if (pickerBG.value === '#000000') pickerBG.value = '#7c05f3';
+    if (pickerFG.value === '#000000') pickerFG.value = '#ffffff';
+    setPixelColour_BG(pickerBG.value);
+    setPixelColour_FG(pickerFG.value);
 </script>
+<!-- =================================================================================================================== -->	
 
-<!-- <script>
-	setInterval(function() {
-		if(cpu.running === true) {
-			console.log("FUCK");
-			cpu.drawFlag = true;
-			// cpu.cycle();
+<script>    
+    var loadHexTest = function() {
+        var testHex = [
+            0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+            0x20, 0x60, 0x20, 0x20, 0x70, // 1
+            0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+            0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+            0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+            0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+            0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+            0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+            0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+            0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+            0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+            0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+            0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+            0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+            0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+        0xF0, 0x80, 0xF0, 0x80, 0x80  // F
+        ];
 
-			if(cpu.drawFlag == true) {
+        // console.log(testHex[0].toString(16));//WORKS: GIVES YOU "FF"
+        // var hexArr = [0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, 0x00, 0x01, 0x01, 0x01, 0x00, 0x60];
+        // var hexArr = [0x01];
+        //Keep this for reference on later usages. To be used in future for other loaded arrays. To be turned into a function later. Visual/Chip8
+        for (let i = 0, x = 0, y = 0; i < testHex.length / 5; i++, x++) {
+            if (x >= 8) {
+                y++;
+                x = 0;
+            }
 
+            cpu.drawIntoDisplayArray(testHex.slice(i * 5, (i + 1) * 5), x * 6, y * 6, 5); // sprite, x, y, h
+        }
+    }
 
-				console.log("DRAW");
-				cpu.drawOntoScreen();
-			}
-		}
-	}, 2000); //2 seconds
-</script> -->
+    let yeet = 'donaldson';
+    let leet = 0;
+    window.onkeydown = function(ev) {
+        if (ev.key === yeet.charAt(leet)) {
+            if (++leet == yeet.length) {
+                function rt() {
+                    return (Math.floor(Math.random() * 0xFF).toString(16)).padStart(2, "0");
+                }
+
+                document.body.style.animation = 'yeet 18.53s ease infinite alternate';
+                document.body.style.xOverflow = 'hidden';
+                document.getElementById("logo").style.animation = "blehh2 0.1s linear infinite";
+                setInterval(function() {
+                    pickerFG.value = ('#' + rt() + rt() + rt());
+                    pickerBG.value = ('#' + rt() + rt() + rt());
+                    setPixelColour_BG();
+                    setPixelColour_FG();
+                }, 1000);
+            }
+        } else {
+            leet = 0;
+        }
+    }
+</script>
 
 </body>
 
