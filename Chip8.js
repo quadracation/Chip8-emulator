@@ -7,7 +7,7 @@ class CPU {
         this.I = null; 
 
         this.pc     = 0x200; 														//The starting location ("public" section (location 512))
-        this.opcode = undefined;                                                    //Opcode to tell us which instruction set to use (: 
+        this.opcode = 0;                                                    //Opcode to tell us which instruction set to use (: 
 
         this.stack        = new Array(16); 											//Used for callbacks (and storing function calls)
         this.stackPointer = 0; 														//The pointer is not currently at any location (ints)
@@ -25,21 +25,30 @@ class CPU {
         this.renderer      = undefined;										        
 
         this.paused = true;
+        this.stepForward = false;
+        this.hasROM = false;
     } //function CONSTRUCTOR() 
 
 
     // GETTERS & SETTERS (inline & small)
     getDisplayArray()      { return this.display;                              }
     getMemory()            { return this.memory;                               }
+    getRegisterItem(i)     { return this.V[i];                                 }
     getWidth()             { return this.displayWidth;                         }
     getHeight()            { return this.displayHeight;                        }
     getRenderer()          { return this.renderer;                             }
     getOpcode()            { return this.opcode.toString(16).padStart(4, '0'); }
     getProgramCounter()    { return this.pc;                                   }
     setRenderer(renderer)  { this.renderer = renderer;                         }                             //new Object
+    setStepForward(bool)   { this.stepForward = bool;                          }
 
-    get running() {
-        return !this.paused;
+    get paused() {
+        // Seriously guys, please be consistent.
+        return this._isPaused; 
+    }
+
+    set paused(pause) {
+        this._isPaused = pause;
     }
 
     updateTimers() {
@@ -102,14 +111,6 @@ class CPU {
             memory[i + 0x200] = gameName[i]; 
         }
     }
-
-    // loadIntoDisplayArray(arr) {
-    //     for(let i = 0; i < arr.length; i++) {
-    //         this.display[i] = arr[i];
-    //         console.log("Display["+i+"]: " + arr[i])
-    //     }
-    //     // this.drawFlag = true;
-    // }
 
     Hex2Bin(hex) {
         return parseInt(hex, 16).toString(2).padStart(8, '0');
@@ -201,23 +202,6 @@ class CPU {
         this.startup();
 
     } //function RESET()
-
-    //DO NOT DELETE THIS. THIS *WILL* BE USED.
-    // emulate() {
-    //     this.reset();
-        
-    //     //loadGame()....
-
-    //     for(;;) {
-    //         this.cycle();
-
-    //         if(this.drawFlag === true) {
-    //             drawOntoScreen();
-    //         }
-
-    //         //Get User Input through Keys
-    //     }
-    // }
     
     drawOntoScreen() {
         //<somehow> load all HEX values from the .ch8 file
@@ -233,21 +217,21 @@ class CPU {
         this.paused = !this.paused;
     }
 
+    readjustRegisters() {
+        for(let i = 0; i < this.length; i++) {
+            if(this.V[i] > 255) this.V[i] = this.V[i] % 256;
+        }
+    }
+
+    fixNumber(x) { //Ensures that register values do not exceed the lower and upper bounds of 0~255. 
+        return (x + 256) % 256;
+    }
+
     cycle() { //Running the program. Initialized outside of this file in an infinite loop
-        if(this.paused !== true) {
-
-
+        if(this.paused !== true || this.stepForward == true) {
+    
         this.opcode = this.memory[this.pc] << 8 | this.memory[this.pc+1];
-        
-        //Special thanks to: ETHAN P. for these console logs
-        console.log("PC:     " + this.pc.toString(16).padStart(4, '0'));
-        console.log("OpCode: " + this.opcode.toString(16).padStart(4, '0'));
-        console.log("OpCode Type: " + typeof(this.opcode));
-        console.log("Opcode & 0xF000: " + (this.opcode & 0xf000).toString(16).padStart(4, '0'));
-        console.log("Opcode & 0x000F: " + (this.opcode & 0x000f).toString(16).padStart(4, '0'));
-        console.log("\n");
-
-
+            
         //Refer to these. Let vs. var (?) Use Let for now. 
         let NNN = this.opcode & 0xFFF;
         let  NN = this.opcode & 0xFF;
@@ -298,7 +282,7 @@ class CPU {
                 break;
             case 0x3000: // [3XNN]: If VX == NN, then skip 1 operation. 
                 //program counter(pc) is the one that tracks the instructions in memory.
-                if( this.V[X] === NN) 
+                if( this.V[X] == NN) 
                     this.pc += 4; //increment to the next 2 bytes (next this.opcode)
                 else  
                     this.pc +=2;
@@ -311,8 +295,8 @@ class CPU {
                     this.pc += 2;
                 break;
 
-            case 0x5000: // [5XY0]: If VX === VY, skip 1 operation.
-                if( this.V[X] === this.V[Y])
+            case 0x5000: // [5XY0]: If VX == VY, skip 1 operation.
+                if( this.V[X] == this.V[Y])
                     this.pc += 4;
                 else
                     this.pc += 2;
@@ -322,12 +306,7 @@ class CPU {
                 this.pc += 2;
                 break;
             case 0x7000: // [7XNN]: Adds NN to VX (i.e., VX += NN); no carry flag.
-                let newLoc = this.V[X] + NN;
-                //I don't think you need this; from Cowgod's guide.
-                // if(newLoc > 255) { //In case you access the wrong area of memory 
-                //     newLoc -= 256; //0 is included, so bound 255+1
-                // }
-                this.V[X] = newLoc;
+                this.V[X] = this.fixNumber(this.V[X] + NN);
                 this.pc += 2;
                 break;
             case 0x8000:
@@ -354,45 +333,28 @@ class CPU {
                         let newLoc = this.V[X]  +  this.V[Y];
                         if(newLoc > 255) {
                             this.V[0xF] = 1;
-                            newLoc -= 256; //0 is included so bound 255+1 
                         } 
-                        this.V[X] = newLoc;
+                        this.V[X] = this.fixNumber(newLoc);
                         this.pc+=2; //next 2 bytes
                         break;
                     case 0x0005: //[8XY5]: VY is subtracted from VX. VF is set to 0 when there's a borrow, and 1 when there isn't. 
-                        let newLoc2 = this.V[X] - this.V[Y];
-                        if (this.V[Y] > this.V[X]){
-                            this.V[0xF] = 0;
-                        }else{
-                            this.V[0xF] = 1;
-                        }
-
-                        this.V[X] = newLoc2;
-                        if (this.V[X] < 0){
-                            this.V[X] += 256;
-                        }
+                        this.V[0xF] = this.V[X] > this.V[Y] ? 1 : 0;
+                        this.V[X] = this.fixNumber(this.V[X] - this.V[Y]);
                         this.pc += 2;
                         break;
                     case 0x0006: //[8XY6]: Stores the least significant bit of VX in VF and then shifts VX to the right by 1.
-                        this.V[0xF] = this.V[X] & 0xFF;
+                        this.V[0xF] = this.V[X] & 0x1;
                         this.V[X] >>=1;
                         this.pc += 2;
                         break;
-                    case 0x0007:
-                        this.V[X] = this.V[Y] - this.V[X];
-                        if (this.V[X] > this.V[X]){
-                        this.V[0xF] = 0;
-                        }else{
-                        this.V[0xF] = 1;
-                        }
-                        if (this.V[X] < 0){
-                        this.V[X] += 256;
-                        }
+                    case 0x0007: //[8XY7]: VX is VY minus VX. VF is set to 0 when there's a borrow, and 1 when there isn't. 
+                        this.V[X] = this.fixNumber(this.V[Y] - this.V[X]);
+                        this.V[0xF] = this.V[Y] > this.V[X] ? 1 : 0;
                         this.pc += 2;
                         break;
-                    case 0x000E:
-                        this.V[0xF] = this.V[X] & 0x000F;
-                        this.V[X] <<= 1;
+                    case 0x000E: //[8XY6]: Stores the most significant bit of VX in VF and then shifts VX to the left by 1.
+                        this.V[0xF] = this.V[X] >> 7;
+                        this.V[X] = this.fixNumber(this.V[X] << 1);
                         this.pc += 2;
                         break;
                     default:
@@ -405,11 +367,7 @@ class CPU {
                 break;
             
             case 0x9000: //[9XY0]: If(Vx != Vy), then skip next instruction (Add 2 to this.pc). 
-                if(this.V[X] != this.V[Y]) 
-                    this.pc += 4;
-                else 
-                    this.pc += 2;
-                
+                this.pc += (this.V[X] !== this.V[Y]) ? 4 : 2;
                 break;  
 
             case 0xA000: // [ANNN]: Sets I to the address NNN. 
@@ -449,82 +407,14 @@ class CPU {
             
                 this.pc += 2;
                 break;
-
-
-
-
-                //Similar as above. Works the same. KEEP
-                // let heightN = this.opcode & 0x000F;
-                // let pixel = 0;
-                // this.V[0xF] = 0;
-
-                // for(let row = 0; row < heightN; row++) {
-                //     pixel = this.memory[this.I + row];
-                //     for(let col = 0; col < 8; col++) {
-                //         if( (pixel & (0x80 >> col)) != 0 ) {
-                //             if(this.display[ (this.X + col + ((this.Y + row)*64)) ]) {
-                //                 this.V[0xF] = 1;
-                //             }
-                //             this.display[ this.X + col + ((this.Y + row)*64) ] ^= 1;
-                //         }
-                //     }
-                // }
-                // this.drawFlag = true;
-                // this.pc += 2;
-                // //Courtesy of multigesture.net on How to make a Chip8 Interpreter
-                // break;
-
-
-
-                // // Invert the bit value (pixel shade) upon collision (you check ful 15x8 sprite).
-                // //Since Javascript doesn't really have a preference between Column vs. Row Ordering, we assume (Y,X) and not (X,Y).
-                // //i.e., Y=x-axis(col), X=y-axis(row). 
-                // let xCoord = this.V[X];
-                // let yCoord = this.V[Y];
-                // let pixHeight = this.V[this.opcode&0x000f];
-
-                // //VF is set to 1 when there is a pixel Collision; 0 when there is not. i.e., VF = 0 by default.
-                // this.V[0xF] = 0;
-                // //Parsing through your display array, check to see if the requested pixel location is 1 and the existing area is 1.
-                // for(let row = 0; row < pixHeight; row++) { //[...][Y]
-                //     //Pixel: Start in memory at location I. Parsing through the rows, so I+i
-                //     pixel = memory[I + row]; 
-                //     //[X][...]
-                //     for(let col = 0; col < 8; j++) { //Check through the max width (1-byte). Chip8 images are full sprites of 15x8 pixels. 
-                //         //Check if the pixel and the row collide (a^b, a=b -> FALSE). 
-                //         //Do this by having pixel AND with (8-bit binary string >> current(i)) be checked for 1 (1^1 = FALSE) -> VFflag.
-                //         if((pixel & 0x80) == 1) { //If already drawn somewhere. 1 here is 'a' in a^b
-                //             //If the FILLED area (think of area formula) of the current display field is still 1(b)
-                //             //a^b, a=b=1 -> FALSE. Flag triggered. We're using locations via bit addition. Ask for more info!
-                //             if( this.setPixel(xCoord+col, yCoord+ row)){ 
-                //                 //If (X + xDisplacement, Y + yDisplacement * fillWidth(64)) == filled (1):
-                //                 this.V[0xF] = 1; // Set flag if 1^1 (FALSE)
-                //             }
-
-                //         } // if
-                //     } // for(col)
-                // } // for(row)
-
-                // this.drawFlag = true; //Not signalling? -> Will fix later 
-                // this.pc+=2; //Looping solution(?) -> Will fix later
-                // break;
             case 0xE000:
                 //Has multiple this.opcodes.
                 switch(this.opcode & 0x000f) {
                     case 0x000E: // [EX9E]: Skip next instruction if the key stored in this.V[X] is pressed.
-                        // if(this.keys[this.V[X]]) then this.pc += 2	
-                        // if(this.keys[this.V[X]]) then this.pc += 2
-                        if (this.keys[this.V[X]]){
-                            this.pc += 4;
-                        }
-                        else this.pc += 2;
+                        this.pc += (this.keys[this.V[X]] ? 4 : 2);
                         break;
                     case 0x0001: // [EXA1]: Skip next instruction if the key stored in this.V[X] is NOT pressed.
-                        // if(!this.keys[this.V[X]]) then this.pc += 2
-                        if (!this.keys[this.V[X]]){
-                            this.pc += 4;
-                        }
-                        else this.pc += 2;
+                        this.pc += (this.keys[this.V[X]] ? 2 : 4);
                         break;
                     default:
                         //No such code:
@@ -538,7 +428,7 @@ class CPU {
                 //Lots of mutliple this.opcodes.
                 switch(this.opcode & 0x00FF) {
                     case 0x0007: // [FX07]: Set this.V.[X] to the value of the delay timer.
-                        this.V[X] = this.delayTimer;
+                        this.V[X] = Math.floor(this.delayTimer);
                         this.pc +=2;
                         break;
                     case 0x000A: // [FX0A]: A key press is awaited. Once pressed store in this.V[X]. Pls send Halp.
@@ -547,7 +437,7 @@ class CPU {
                         //If there exists at least one keypress, then we will increment pc. Otherwise, we will loop this pc location. 
                         let keyPressed = false;
                         for(let i = 0; i < this.keys.length; i++) {
-                            if(this.keys[i] === true){
+                            if(this.keys[i] == true){
                                 keyPressed = true;
                                 this.V[X] = this.currentKey; //'i'
                             }
@@ -565,7 +455,7 @@ class CPU {
                         this.pc += 2;
                         break;
                     case 0x001E: // [FX1E]: Add VX to I. 
-                        this.I = (this.I + this.V[X]);
+                        this.I += this.V[X];
                         this.pc += 2;
                         break;
                     case 0x0029: // [FX29]: Set I to location of spirte for character in this.V[X]. Characters 0-F (hexdex) represented by a 4x5 font.
