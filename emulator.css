@@ -1,0 +1,154 @@
+body {
+	color: black;
+	text-align: center;
+	margin: 0px;
+
+	background: linear-gradient(0.33turn, maroon, blue);
+}
+
+@keyframes blehh {
+	0% { color: red; text-shadow: white 0px 0px 2px; }
+	15% { color: orange; text-shadow: violet 0px 0px 2px; }
+	30% { color: yellow; text-shadow: indigo 0px 0px 2px; }
+	45% { color: green; text-shadow: blue 0px 0px 2px; }
+	60% { color: blue; text-shadow: green 0px 0px 2px; }
+	75% { color: indigo; text-shadow: yellow 0px 0px 2px; }
+	80% { color: violet; text-shadow: orange 0px 0px 2px; }
+	95% { color: white; text-shadow: red 0px 0px 2px; }
+}
+
+@keyframes blehh2 {
+	0% { transform: rotateZ(0deg); }
+	100% { transform: rotateZ(360deg); }
+}
+
+@keyframes yeet {
+	0% {
+		transform: translateY(0px) translateX(0px) rotateZ(0deg);
+	}
+
+	50% {
+		transform: translateY(-10px) translateX(-10px) rotateZ(-1deg);
+	}
+
+	100% {
+		transform: translateY(0px) translateX(0px) rotateZ(1deg);
+	}
+}
+
+#logo {
+	animation: blehh2 0.75s infinite linear;
+	margin-top: 20px;
+	margin-bottom: -5px;
+	box-shadow: violet 0px 1px 5px;
+}
+
+#bleh {
+	color: white;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+
+	background: rgba(0,0,0,0.3);
+	padding: 5px;
+	border-top: #000 1px dashed;
+	border-bottom: #000 1px dashed;
+}
+
+#bleh div {
+	animation: blehh 5s infinite;
+	animation-direction: alternate;
+	text-shadow: #fff 0px 0px 2px;
+}
+
+input[type="file"] {
+	width: 74px;
+}
+
+input[type="color"] {
+	border: none;
+	width: 70px	;
+	height: 45px;
+}
+
+table {
+	width: 100%;
+
+	align-self: stretch;
+
+	border-collapse: collapse;
+
+	padding: 1px;
+}
+th {
+	border: 1px solid #1f1f1f;
+	text-align: center;
+	color: white;
+	padding: 10px;
+}
+
+.buttonGroup {
+	display: flex;
+	align-items: start;
+	justify-content: space-between;
+	white-space: nowrap;
+}
+
+.buttonGroup .button {
+	background-color: #353434;
+	border: 1px solid #353434;
+	color: white;
+	padding: 15px;
+
+	text-align: center;
+
+	display: flex-box;
+	cursor: pointer;
+}
+
+.buttonGroup button:not(:last-child) {
+	border-right: none;
+}
+
+input:hover,
+button:hover {
+	background-color: #525151;
+	box-shadow: var(--fg) 0px 0px 10px inset;
+}
+
+#wrapper {
+	background: rgba(0,0,0,0.75);
+	border-top: #000 1px solid;
+	box-shadow: rgba(0,0,0,0.3) 0px 5px 10px inset;
+}
+
+#chipScreen {
+	background: black;
+}
+
+#mainContainer {
+	display: flex;
+	justify-content: center;
+
+}
+#registers {
+	background: #353434;
+}
+
+/* For the [Memory] Scroll Box */
+#memory{
+	background: #353434;
+	width : 200px;
+
+	resize: none;
+
+	align-self: stretch;
+
+	/* background-color: black; */
+	margin: 0px;
+	border: 2px solid #353434;
+	padding: 20px;
+
+	font-family: 'Courier New', Courier, monospace;
+	color: white;
+	overflow: auto;
+}
