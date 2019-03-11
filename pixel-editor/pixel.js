@@ -53,11 +53,10 @@ function lookup(binaryString) {
  return result;
 }
 
-// Function creates 2 nibbles from each row
-// Each nibble is looked up in the lookupTable
-// The hexadecimal value is added to 0x string
-// All 15 hex values currently shown in console.log()
-// TBD later how to display ^
+// Function takes binary array as input
+// Each line is seperated into 2 string of length 4
+// Each string is converted into hexadecimal using a lookup table
+// The hexadecimal value is added to a 0x string
 function bin2Hex() {
     for(i = 0; i < 120; i += 8) {
         hexadecimalValue   = "0x";
@@ -70,8 +69,8 @@ function bin2Hex() {
         hexadecimalValue  += lookup(binaryStringSecond);
         // console.log(binaryStringSecond);
 
-        var x = document.createElement("bin2Hex"); 
-        x.textContent = hexadecimalValue + "\n";        
+        var x              = document.createElement("bin2Hex"); 
+        x.textContent      = hexadecimalValue + "\n";        
         document.body.appendChild(x);        
     }// for loop
   }// function

@@ -15,13 +15,13 @@ Instructions: </br>
 -Reload the page to reset all pixel locations or to erase the previous hex values </br>
 </p>
 
-<!-- Allowing user to choose which color to paint. --> 
+<!-- Allowing the user to choose which color to paint. --> 
 <div id="options">
   <div class="mouse" style="background-color:white;" onclick="setMouseColor('white')"></div>
   <div class="mouse" style="background-color:black;" onclick="setMouseColor('black')"></div>
 </div>
 
-<!-- 8 x 15 Grid for Pixel Editor. --> 
+<!-- 15 x 8 Grid for Pixel Editor. --> 
 <div id="pixelEditor">
   <div class="row">
     <div class="pixel1" onclick = "setPixelColor1(this)"></div>
@@ -175,7 +175,7 @@ Instructions: </br>
   </div>
 </div>
 
-<!-- Button that called bin2Hex() -->
+<!-- Button that calls bin2Hex() -->
 <br>
   <button onclick="bin2Hex()"> Convert to Hex </button>
 </br>
