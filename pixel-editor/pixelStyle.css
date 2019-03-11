@@ -1,0 +1,857 @@
+#pixelEditor {
+  display:            table;
+  border-spacing:     1px;
+  background-color:   black;
+  border:             1px black;
+}
+
+.row {
+  display:            table-row;
+}
+  
+.mouse {
+  display:            inline-block;
+  width:              50px;
+  height:             50px;
+  border:             3px solid black;
+}
+
+.pixel1 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel2 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel3 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel4 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel5 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel6 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel7 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel8 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel9 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel10 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel11 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel12 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel13 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel14 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel15 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel16 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel17 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel18 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel19 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel20 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel21 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel22 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel23 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel24 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel25 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel26 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel27 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel28 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel29 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel30 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel31 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel32 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel33 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel34 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel35 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel36 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel37 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel38 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel39 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel40 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel41 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel42 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel43 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel44 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel45 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel46 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel47 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel48 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel49 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel50 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel51 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel52 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel53 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel54 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel55 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel56 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel57 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel58 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel59 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel60 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel61 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel62 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel63 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel64 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel65 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel66 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel67 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel68 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel69 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel70 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel71 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel72 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel73 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel74 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel75 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel76 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel77 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel78 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel79 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel80 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel81 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel82 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel83 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel84 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel85 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel86 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel87 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel88 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel89 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel90 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel91 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel92 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel93 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel94 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel95 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel96 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel97 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel98 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel99 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel100 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel101 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel102 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel103 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel104 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel105 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel106 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel107 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel108 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel109 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel110 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel111 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel112 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel113 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel114 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel115 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel116 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel117 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel118 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel119 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
+
+.pixel120 {
+  display:            table-cell;
+  background-color:   white;
+  width:              50px;
+  height:             50px;
+}
