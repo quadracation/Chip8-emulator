@@ -1,9 +1,8 @@
 body {
 	color: black;
-	text-align: center;
 	margin: 0px;
 
-	background: linear-gradient(0.33turn, maroon, blue);
+	background: linear-gradient(0.6turn, grey, white);
 }
 
 @keyframes blehh {
@@ -37,10 +36,11 @@ body {
 }
 
 #logo {
-	animation: blehh2 0.75s infinite linear;
+	/* animation: blehh2 0.75s infinite linear; */
 	margin-top: 20px;
 	margin-bottom: -5px;
-	box-shadow: violet 0px 1px 5px;
+	box-shadow: rgb(14, 9, 44) 0px 1px 5px;
+	align-self: left;
 }
 
 #bleh {
@@ -115,19 +115,33 @@ button:hover {
 	box-shadow: var(--fg) 0px 0px 10px inset;
 }
 
+.keyPad {
+	align-content: start;
+	display: grid;
+	flex-wrap: wrap;
+}
+#keys {	
+	padding: 26px;
+}
+
 #wrapper {
 	background: rgba(0,0,0,0.75);
 	border-top: #000 1px solid;
 	box-shadow: rgba(0,0,0,0.3) 0px 5px 10px inset;
 }
 
+chipScreen {
+	/* text-align: left; */
+}
 #chipScreen {
+	display:flex;
 	background: black;
+
 }
 
 #mainContainer {
 	display: flex;
-	justify-content: center;
+	/* flex-wrap: wrap; */
 
 }
 #registers {
@@ -141,7 +155,7 @@ button:hover {
 
 	resize: none;
 
-	align-self: stretch;
+	justify-content: stretch;
 
 	/* background-color: black; */
 	margin: 0px;
