@@ -654,6 +654,13 @@ The test file contains main functional testing to ensure that regular operations
 - [28] “Using files from web applications,” MDN Web Docs, 22-Jan-2019. [Online]. Available: https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications. [Accessed: 20-Feb-2019]. 
 
 
+**<h3><font size = "5">Release 3 </font></h3>**
+
+- [29] Code Club, "Pixel Art", in Code Club Projects, [Online], available at https://codeclubprojects.org/en-GB/webdev/pixel-art/, 2012.
+  
+- [30] w3schools, “onkeypress Event”, in w3schools.com, [Online], available at https://www.w3schools.com/jsref/event_onkeypress.asp, 1999.
+
+<br>
 
 </font>
 
