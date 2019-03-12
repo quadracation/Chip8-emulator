@@ -38,11 +38,11 @@ Renderer.prototype.render=function(displayArray){                  //pass in our
                                                                    //Colour and fill in the pixel at the specified location
                                                                    //# R G B -> # 00 00 00; each R/G/B is 1-byte long (2 nibbles)
         if (displayArray[i] != 0) {
-            this.context.fillStyle = this.BGColour;                            //light blue pixels
+            this.context.fillStyle = this.FGColour;                            //light blue pixels
             this.context.fillRect(x, y, this.scalar, this.scalar);     //fillRext(xCord, yCord, xWidth, yHeight)
         }
         else {
-            this.context.fillStyle = this.FGColour;                            //light blue pixels
+            this.context.fillStyle = this.BGColour;                            //light blue pixels
             this.context.fillRect(x, y, this.scalar, this.scalar);     //fillRext(xCord, yCord, xWidth, yHeight)
 
         }
