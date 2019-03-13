@@ -207,13 +207,13 @@ class CPU {
     // Update Key if pressed
     setKeyDown(key) {
         this.keys[key] = true;
-        this.currentKey = key;
+        this.currentKey = this.fixNumber(key);
     }
 
     // Update key if release
     setKeyUp(key) {
         this.keys[key] = false; 
-        this.currentKey = -1; // deleted
+        this.currentKey = 0; // deleted
     }
 
     pause(){
@@ -229,8 +229,8 @@ class CPU {
         if(this.paused !== true || this.stepForward == true) {
     
         this.opcode = this.memory[this.pc] << 8 | this.memory[this.pc+1];
-        console.log("PC: " + this.pc);    
-        console.log("OC: " + this.opcode);
+        // console.log("PC: " + this.pc);    
+        // console.log("OC: " + this.getOpcode());
         //Refer to these. Let vs. var (?) Use Let for now. 
         let NNN = this.opcode & 0x0FFF;
         let  NN = this.opcode & 0x00FF;
@@ -342,12 +342,12 @@ class CPU {
                         break;
                     case 0x0006: //[8XY6]: Stores the least significant bit of VX in VF and then shifts VX to the right by 1.
                         this.V[0xF] = this.V[X] & 0x1;
-                        this.V[X] >>=1;
+                        this.V[X] = this.fixNumber(this.V[X] >> 1);
                         this.pc += 2;
                         break;
                     case 0x0007: //[8XY7]: VX is VY minus VX. VF is set to 0 when there's a borrow, and 1 when there isn't. 
-                        this.V[X] = this.fixNumber(this.V[Y] - this.V[X]);
                         this.V[0xF] = this.V[Y] > this.V[X] ? 1 : 0;
+                        this.V[X] = this.fixNumber(this.V[Y] - this.V[X]);
                         this.pc += 2;
                         break;
                     case 0x000E: //[8XY6]: Stores the most significant bit of VX in VF and then shifts VX to the left by 1.
@@ -395,7 +395,7 @@ class CPU {
                         let idx = ((drawY + spriteY) * this.displayWidth) + drawX + spriteX;
                         let on = (this.memory[spriteAddr] & (1 << (7 - spriteX))) > 0 ? 1 : 0;
                         if (on == 1 && this.display[idx] == 1) this.V[0xF] = 1;
-                        this.display[idx] ^= on;
+                        this.display[idx] ^= on; 
                     }
 
                     spriteAddr++;
@@ -433,9 +433,12 @@ class CPU {
                         //Stop all instructions until a key is pressed, then store the key value in Register x
                         //Method: Check all key indexes to search for at least one TRUE key. If none are true, then skip this function and try again next time.
                         //If there exists at least one keypress, then we will increment pc. Otherwise, we will loop this pc location. 
-                        if(this.keys[i] == true){
-                            keyPressed = true;
-                            this.V[X] = this.currentKey; //'i'
+                        for(let i = 0; i < this.keys.length; i++) {
+                            if(this.keys[i] == true){
+                                this.keyPressed = true;
+                                this.V[X] = this.currentKey; //'i'
+                                this.pc += 2;
+                            }
                         }
                         break;
                     case 0x0015: // [FX15]: Set this.delayTimer to this.V[X].
@@ -443,7 +446,7 @@ class CPU {
                         this.pc += 2;
                         break;
                     case 0x0018: // [FX18]: Set this.soundertimer to this.V[X].
-                        this.soundtimer = this.V[X];
+                        this.soundTimer = this.V[X];
                         this.pc += 2;
                         break;
                     case 0x001E: // [FX1E]: Add VX to I. 
@@ -465,8 +468,8 @@ class CPU {
                         this.pc += 2;
                         break;
                     case 0x0055: //stores registers V0 to VX in memory from location I
-                        for (var i=0; i<=X;i++){
-                            this.memory[this.I+i]=this.V[i];
+                        for (let i=0; i<=X; i++){
+                            this.memory[this.I+i] = this.V[i];
                         }
                         this.pc += 2;
                         break;
