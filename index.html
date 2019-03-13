@@ -18,6 +18,9 @@
     <marquee id="bleh" behavior= "Scroll" direction= "left"><div>Team #16 Presents: CHIP-8 Emulator</div></marquee>
 </div>
 <br>
+<div id="sound">
+    Beep!
+</div>
 <div id="wrapper">	
     <div class="buttonGroup">    
             <!--Buttons-->	
@@ -73,49 +76,56 @@
         <!--Keypad-->
         <!--This is called an Event Delegation-->
         <div class="keyPad" id="keyPad">
-            <button key="1">[1]</button>    
-            <button key="2">[2]</button>    
-            <button key="3">[3]</button>    
-            <button key="4">[4]</button> 
-            <button key="5">[5]</button> 
-            <button key="6">[6]</button>    
-            <button key="7">[7]</button>    
-            <button key="8">[8]</button> 
-            <button key="9">[9]</button> 
-            <button key="0">[0]</button>
-            <button key="A">[A]</button>    
-            <button key="B">[B]</button>   
-            <button key="C">[C]</button>    
-            <button key="D">[D]</button>    
-            <button key="E">[E]</button>    
-            <button key="F">[F]</button> 
+            <button key="1" binding="1">[1]</button>   
+            <button key="2" binding="2">[2]</button>    
+            <button key="3" binding="3">[3]</button>    
+            <button key="C" binding="4">[C]</button>   
+
+            <button key="4" binding="q">[4]</button>  
+            <button key="5" binding="w">[5]</button> 
+            <button key="6" binding="e">[6]</button>   
+            <button key="D" binding="r">[D]</button> 
+
+            <button key="7" binding="a">[7]</button> 
+            <button key="8" binding="s">[8]</button>  
+            <button key="9" binding="d">[9]</button>  
+            <button key="E" binding="f">[E]</button> 
+
+            <button key="A" binding="z">[A]</button>  
+            <button key="0" binding="x">[0]</button>  
+            <button key="B" binding="c">[B]</button> 
+            <button key="F" binding="v">[F]</button> 
         </div>
         
         <script>
+            //Keyboard/Screen Key-Button Bindings 
             const keyPad = document.getElementById('keyPad');
+            const keyPadBindings = [...keyPad.querySelectorAll('button')].reduce(function (acc, val) {
+                return { ...acc, [val.getAttribute('binding')]: val };                       //Make dictionary from keyPad buttons
+            }, {});
             
             keyPad.onmousedown = function(event) {
                 const key = event.target.getAttribute('key'); //literal key (type: String / null)
-                if (key != null) { 
+                event.target.classList.add('pressed');
+                if (key != null) {
                     cpu.setKeyDown(parseInt(key, 16)); //Cast & turn into a regular int (for reading) 
                 }
             }
 
             keyPad.onmouseup = function(event) {
                 const key = event.target.getAttribute('key');
+                event.target.classList.remove('pressed'); //Removed from Transition when UP
                 if (key != null) {
-                    cpu.setKeyUp(parseInt(key, 16));
+                    cpu.setKeyUp(parseInt(key, 16)); //Take off Key 
                 }
             };
         </script>
-        
-
-
-
-        <!--Memory Box Area -->
-        <textarea id="memory" readonly></textarea>
+    
     </div>
     
+
+    <!--Memory Box Area -->
+    <textarea id="memory" readonly></textarea>
 
     <br><br><br><br><br>
 
@@ -207,6 +217,22 @@
 
     setInterval(function() {
         cpu.updateTimers();
+
+        let soundTimeout = null;
+
+        // how does one sound?
+        if (cpu.soundTimer > 0) {
+            document.getElementById('sound').classList.add('playing');
+            
+            if (soundTimeout != null) {
+                clearTimeout(soundTimeout);
+            }
+
+            soundTimeout = setTimeout(() => {
+                soundTimeout = null;
+                document.getElementById('sound').classList.remove('playing');
+            }, 400);
+        }
     }, 1000/60); //60 times a second
 
 
@@ -234,28 +260,19 @@
     };
 
    // New Key Lookup Table
-   keycodeLookupTable = {
-        49: 0,
-        50: 1,
-        51: 2,
-        52: 3,
-        81: 4,
-        87: 5,
-        69: 6,
-        82: 7,
-        65: 8,
-        83: 9,
-        68: 10,
-        70: 11,
-        90: 12,
-        88: 13,
-        67: 14,
-        86: 15
-    }
+    window.addEventListener('keydown', function(e) { 
+        if (keyPadBindings[e.key] != null) {
+            keyPadBindings[e.key].classList.add('pressed');
+            cpu.setKeyDown(parseInt(keyPadBindings[e.key].getAttribute('key'), 16));
+        }
+     });
 
-    window.addEventListener('keydown', function(e) { cpu.setKeyDown(keycodeLookupTable[e.keyCode]); });
-    window.addEventListener('keyup', function(e) { cpu.setKeyUp(keycodeLookupTable[e.keyCode]); });
-
+    window.addEventListener('keyup', function(e) { 
+        if (keyPadBindings[e.key] != null) {
+            keyPadBindings[e.key].classList.remove('pressed');
+            cpu.setKeyUp(parseInt(keyPadBindings[e.key].getAttribute('key'), 16));
+        }
+     });
 
     window.addEventListener('keydown', function (e){
           var key = e.keyCode;
