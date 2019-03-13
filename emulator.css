@@ -1,10 +1,156 @@
+/* ----------------------------------------------------------- */
+/* MAIN BODY */
+/* ----------------------------------------------------------- */
 body {
 	color: black;
 	margin: 0px;
-
 	background: linear-gradient(0.6turn, grey, white);
 }
 
+#wrapper {
+	background: rgba(0,0,0,0.75);
+	border-top: #000 1px solid;
+	box-shadow: rgba(0,0,0,0.3) 0px 5px 10px inset;
+}
+
+
+
+/* ----------------------------------------------------------- */
+/* KEYPAD */
+/* ----------------------------------------------------------- */
+.keyPad {
+	display: grid;
+	grid-template-columns: repeat(4, 25%);
+	grid-template-rows:    repeat(4,25%);
+	width: -moz-available;
+}
+
+.keyPad button {
+	-webkit-appearance: none;
+}
+
+.keyPad button.pressed {
+	background:red;
+}
+
+/* ----------------------------------------------------------- */
+/* KEYPAD & CHIP8 &  MEMORY */
+/* ----------------------------------------------------------- */
+#mainContainer {
+	display: flex;
+	/* flex-wrap: wrap; */
+
+}
+
+/* ----------------------------------------------------------- */
+/* REGISTER TABLE(S) */
+/* ----------------------------------------------------------- */
+#registers {
+	background: #353434;
+}
+table {
+	width: 100%;
+
+	align-self: stretch;
+
+	border-collapse: collapse;
+
+	padding: 1px;
+}
+th {
+	border: 1px solid #1f1f1f;
+	text-align: center;
+	color: white;
+	padding: 10px;
+}
+
+
+/* ----------------------------------------------------------- */
+/* CHIP-8 SCREEN */
+/* ----------------------------------------------------------- */
+chipScreen {
+	/* text-align: left; */
+}
+#chipScreen {
+	display:flex;
+	background: black;
+
+}
+
+
+/* ----------------------------------------------------------- */
+/* MEMORY */
+/* ----------------------------------------------------------- */
+#memory{
+	background: #353434;
+	width : 200px;
+
+	resize: none;
+
+	justify-content: stretch;
+
+	/* background-color: black; */
+	margin: 0px;
+	border: 2px solid #353434;
+	padding: 20px;
+
+	font-family: 'Courier New', Courier, monospace;
+	color: white;
+	overflow: auto;
+}
+
+
+/* ----------------------------------------------------------- */
+/* TOP BUTTONS (PLAY-PAUSE/RESET) */
+/* ----------------------------------------------------------- */
+.buttonGroup {
+	display: flex;
+	align-items: start;
+	justify-content: space-between;
+	white-space: nowrap;
+}
+
+.buttonGroup .button {
+	background-color: #353434;
+	border: 1px solid #353434;
+	color: white;
+	padding: 15px;
+
+	text-align: center;
+
+	display: flex-box;
+	cursor: pointer;
+}
+
+.buttonGroup button:not(:last-child) {
+	border-right: none;
+}
+
+input:hover,
+button:hover {
+	background-color: #525151;
+	box-shadow: var(--fg) 0px 0px 10px inset;
+}
+
+
+/* ----------------------------------------------------------- */
+/* INPUT */
+/* ----------------------------------------------------------- */
+input[type="file"] {
+	width: 74px;
+}
+
+input[type="color"] {
+	border: none;
+	width: 70px	;
+	height: 45px;
+}
+
+
+
+/* ----------------------------------------------------------- */
+/* SPECIAL EFFECTS */
+/* ----------------------------------------------------------- */
 @keyframes blehh {
 	0% { color: red; text-shadow: white 0px 0px 2px; }
 	15% { color: orange; text-shadow: violet 0px 0px 2px; }
@@ -43,6 +189,24 @@ body {
 	align-self: left;
 }
 
+#sound {
+	font-family: "Comic Sans MS", "Comic Sans", arial, helvetica, sans-serif;
+	position: fixed;
+	top: 25px;
+	left: 25px;
+	display: none;
+
+	background-color: white;
+	border: black 3px solid;
+	border-radius: 18px;
+	padding: 15px;
+	box-shadow: #000 3px 3px 8px 1px;
+}
+
+#sound.playing {
+	display: block;
+}
+
 #bleh {
 	color: white;
 	font-family: Arial, Helvetica, sans-serif;
@@ -58,111 +222,4 @@ body {
 	animation: blehh 5s infinite;
 	animation-direction: alternate;
 	text-shadow: #fff 0px 0px 2px;
-}
-
-input[type="file"] {
-	width: 74px;
-}
-
-input[type="color"] {
-	border: none;
-	width: 70px	;
-	height: 45px;
-}
-
-table {
-	width: 100%;
-
-	align-self: stretch;
-
-	border-collapse: collapse;
-
-	padding: 1px;
-}
-th {
-	border: 1px solid #1f1f1f;
-	text-align: center;
-	color: white;
-	padding: 10px;
-}
-
-.buttonGroup {
-	display: flex;
-	align-items: start;
-	justify-content: space-between;
-	white-space: nowrap;
-}
-
-.buttonGroup .button {
-	background-color: #353434;
-	border: 1px solid #353434;
-	color: white;
-	padding: 15px;
-
-	text-align: center;
-
-	display: flex-box;
-	cursor: pointer;
-}
-
-.buttonGroup button:not(:last-child) {
-	border-right: none;
-}
-
-input:hover,
-button:hover {
-	background-color: #525151;
-	box-shadow: var(--fg) 0px 0px 10px inset;
-}
-
-.keyPad {
-	align-content: start;
-	display: grid;
-	flex-wrap: wrap;
-}
-#keys {	
-	padding: 26px;
-}
-
-#wrapper {
-	background: rgba(0,0,0,0.75);
-	border-top: #000 1px solid;
-	box-shadow: rgba(0,0,0,0.3) 0px 5px 10px inset;
-}
-
-chipScreen {
-	/* text-align: left; */
-}
-#chipScreen {
-	display:flex;
-	background: black;
-
-}
-
-#mainContainer {
-	display: flex;
-	/* flex-wrap: wrap; */
-
-}
-#registers {
-	background: #353434;
-}
-
-/* For the [Memory] Scroll Box */
-#memory{
-	background: #353434;
-	width : 200px;
-
-	resize: none;
-
-	justify-content: stretch;
-
-	/* background-color: black; */
-	margin: 0px;
-	border: 2px solid #353434;
-	padding: 20px;
-
-	font-family: 'Courier New', Courier, monospace;
-	color: white;
-	overflow: auto;
 }
