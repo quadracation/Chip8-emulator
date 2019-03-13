@@ -32,19 +32,18 @@ Renderer.prototype.render=function(displayArray){                  //pass in our
     this.clear();                                                  //This will display a "glitching" effect, ...
                                                                    //...common with the CHIP-8 program.
 
+    this.context.fillStyle = this.BGColour;
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
     for(let i = 0; i < displayArray.length; i++){                  // [ ...EXPLAINED BELOW... ]
-        x = (i % this.width) * this.scalar;                        // . . .
-        y = Math.floor(i / this.width) * this.scalar;              // . . .
                                                                    //Colour and fill in the pixel at the specified location
                                                                    //# R G B -> # 00 00 00; each R/G/B is 1-byte long (2 nibbles)
-        if (displayArray[i] != 0) {
+        if (displayArray[i] !== 0) {
+            x = (i % this.width) * this.scalar;                        // . . .
+            y = Math.floor(i / this.width) * this.scalar;              // . . .
+            
             this.context.fillStyle = this.FGColour;                            //light blue pixels
-            this.context.fillRect(x, y, this.scalar, this.scalar);     //fillRext(xCord, yCord, xWidth, yHeight)
-        }
-        else {
-            this.context.fillStyle = this.BGColour;                            //light blue pixels
-            this.context.fillRect(x, y, this.scalar, this.scalar);     //fillRext(xCord, yCord, xWidth, yHeight)
-
+            this.context.fillRect(x, y, this.scalar, this.scalar);     //fillRect(xCord, yCord, xWidth, yHeight)
         }
     }
 
