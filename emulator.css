@@ -4,12 +4,11 @@
 body {
 	color: black;
 	margin: 0px;
-	/* background: linear-gradient(0.6turn, grey, white); */
-	background: white;
+	background: linear-gradient(0.6turn, grey, white);
 }
 
 #wrapper {
-	background: rgba(58, 58, 58, 0.75);
+	background: rgba(0,0,0,0.75);
 	border-top: #000 1px solid;
 	box-shadow: rgba(0,0,0,0.3) 0px 5px 10px inset;
 }
@@ -27,14 +26,11 @@ body {
 }
 
 .keyPad button {
-	color: white;
 	-webkit-appearance: none;
-	background: rgb(26, 25, 25, 0.5);
-	border-color: black;
 }
 
 .keyPad button.pressed {
-	background:rgb(92, 91, 91);
+	background:red;
 }
 
 /* ----------------------------------------------------------- */
@@ -85,13 +81,13 @@ chipScreen {
 /* ----------------------------------------------------------- */
 /* MEMORY */
 /* ----------------------------------------------------------- */
-#memoryContainer {
-	
-}
-
 #memory{
 	background: #353434;
-	width : 100%;
+	width : 200px;
+
+	resize: none;
+
+	justify-content: stretch;
 
 	/* background-color: black; */
 	margin: 0px;
@@ -100,7 +96,7 @@ chipScreen {
 
 	font-family: 'Courier New', Courier, monospace;
 	color: white;
-	text-align: center;
+	overflow: auto;
 }
 
 
@@ -112,12 +108,10 @@ chipScreen {
 	align-items: start;
 	justify-content: space-between;
 	white-space: nowrap;
-	background: rgb(26, 25, 25, 0.7);
 }
 
 .buttonGroup .button {
-	
-	background: rgb(26, 25, 25, 0.5);
+	background-color: #353434;
 	border: 1px solid #353434;
 	color: white;
 	padding: 15px;
