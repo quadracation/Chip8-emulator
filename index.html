@@ -292,7 +292,8 @@
 
     var resetScreen = function() {
         cpu.reset();
-        memo.textContent = "";
+	oc.textContent = "";
+	pc.textContent = "";
         document.getElementById("colourPicker_BG").value = "#000000";
         setPixelColour_BG("colourPicker_BG");
         document.getElementById("colourPicker_FG").value = "#ffffff";
