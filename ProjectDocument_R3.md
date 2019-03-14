@@ -51,8 +51,14 @@ Table of Contents <br>
   - We were able to implement the `STEP FORWARD` Feature, where the user can now lick on the button while the Emulator is Paused to race exactly one step forward.
 
   - Two new games were created:
-    - 1. PONG
-    - 2. ENDLESS FUSE
+    1. PONG (remake):
+        - Move: *P1: [1][A]; P2: [4][F]*
+      
+    2. ENDLESS FUSE (custom):
+        - Objective: *Extend the fuse. Custom take on SNAKE*
+        - Move: *[W][A][S][D]*
+        - Place *Fuse Line: [E]*
+        - Lose State: *Press [E] to restart*
 
   - Emulator can now load most (if not all) original CHIP-8 ROMs. 
 
