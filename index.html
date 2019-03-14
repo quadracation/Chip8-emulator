@@ -292,8 +292,8 @@
 
     var resetScreen = function() {
         cpu.reset();
-	oc.textContent = "";
-	pc.textContent = "";
+	oc.textContent = "OPCODE: --";
+	pc.textContent = "PC: --";
         document.getElementById("colourPicker_BG").value = "#000000";
         setPixelColour_BG("colourPicker_BG");
         document.getElementById("colourPicker_FG").value = "#ffffff";
