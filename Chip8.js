@@ -187,6 +187,8 @@ class CPU {
 
         this.drawFlag     = false;
         this.paused       = false;
+	this.stepForward = false;
+	this.hasROM = false;
 
         this.delayTimer   = 0;
         this.soundTimer   = 0;
