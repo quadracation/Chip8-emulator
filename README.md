@@ -1,11 +1,45 @@
-# 276-emulator
+# CHIP-8 Emulator
 
-For the Project Document, it is advised that you Download the .HTML File into a suitable Folder and run the file from there. It has been reported that Github displays notable bugs when it comes to tables. Such errors include RISK MANAGEMENT and ROLES. 
+<h2> 
+Project Description
+</h2>
+This project is a CHIP-8 emulator written using Javascript, CSS and HTML. The purpose of this project is to display the memory, registers and instructions being executed while running CHIP-8 ROMs. Our project also includes bonus features such as a binary to hexadecimal pixel sprite editor, 2 custom CHIP-8 games and colour customization.
 
-| Team Members          | GitHub                                                |
+<h2> 
+Installation
+</h2>
+Users may download or clone the source files from the repository. In addition, you will require the following software packages:
+
+* [Travis CI](https://travis-ci.org/)
+
+* [Chai](https://www.chaijs.com/)
+
+<h2> 
+Usage
+</h2>
+..
+
+<h2> 
+Automated Testing
+</h2>
+.. 
+
+
+<h2> 
+Authors
+</h2>
+
+| Name                  | GitHub                                                |
 | -------------         |-------------                                          |
 | Linh                  | [jinachu](https://github.com/jinachu)                 |  
 | Ian                   | [1anmoon](https://github.com/1anmoon)                 |    
 | Ben                   | [quadracation](https://github.com/quadracation)       |     
 | Wassim                | [wass1mkhelifi](https://github.com/wass1mkhelifi)     |     
 | William               | [wiblwibl](https://github.com/wiblwibl)               |     
+
+<h2> 
+Documentation
+</h2>
+Please refer to our Project Documentation for further details. It is advised that you download the .HTML File into a suitable Folder and run the file from there. It has been reported that Github displays notable bugs when it comes to tables. Such errors include sections within the document such as RISK MANAGEMENT and ROLES. 
+
+
