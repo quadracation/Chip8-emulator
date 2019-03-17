@@ -23,7 +23,7 @@ body {
 	display: grid;
 	grid-template-columns: repeat(4, 25%);
 	grid-template-rows:    repeat(4,25%);
-	width: -moz-available;
+	width: 100%;
 }
 
 .keyPad button {
