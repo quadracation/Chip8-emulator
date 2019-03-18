@@ -17,11 +17,6 @@ Users may download or clone the source files from the repository. In addition, t
 <h2> 
 Usage
 </h2>
-
-* [CHIP-8 Emulator](https://wiblwibl.github.io/)
-  
-* [Pixel Sprite Editor]()
-
 ..
 
 <h2> 
