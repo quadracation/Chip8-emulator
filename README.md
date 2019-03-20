@@ -18,7 +18,7 @@ Users may download or clone the source files from the repository. In addition, t
 Usage
 </h2>
 
-[Test our emulator here.](https://wiblwibl.github.io/)
+[Test our emulator here.](https://wiblwibl.github.io/cmpt276-chip8-emulator/)
 
 [Test our pixel sprite editor here.](https://wiblwibl.github.io/cmpt276-pixel-sprite-editor/)
 
