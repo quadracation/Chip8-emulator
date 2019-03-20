@@ -18,12 +18,10 @@ Users may download or clone the source files from the repository. In addition, t
 Usage
 </h2>
 
-[You can test our emulator here.](https://wiblwibl.github.io/cmpt276-chip8-emulator/)
+[Test our emulator here.](https://wiblwibl.github.io/)
 
-<h2> 
-Automated Testing
-</h2>
-..
+[Test our pixel sprite editor here.](https://wiblwibl.github.io/cmpt276-pixel-sprite-editor/)
+
 
 <h2> 
 Authors
