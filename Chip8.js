@@ -133,6 +133,7 @@ class CPU {
 
     beep() {
         var sound = new Audio('beep-02.mp3');
+        sound.volume = 0.1;
         sound.play();
     }
 
