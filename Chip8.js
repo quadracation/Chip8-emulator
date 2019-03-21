@@ -7,7 +7,7 @@ class CPU {
         this.I = null; 
 
         this.pc     = 0x200; 														//The starting location ("public" section (location 512))
-        this.opcode = 0;                                                    //Opcode to tell us which instruction set to use (: 
+        this.opcode = 0;                                                            //Opcode to tell us which instruction set to use (: 
 
         this.stack        = new Array(16); 											//Used for callbacks (and storing function calls)
         this.stackPointer = 0; 														//The pointer is not currently at any location (ints)
@@ -59,6 +59,7 @@ class CPU {
 
         if(this.soundTimer > 0) {
             console.log("SOUND!");
+            this.beep();
             this.soundTimer--;
         }
     }
@@ -130,6 +131,11 @@ class CPU {
         }
     }
 
+    beep() {
+        var sound = new Audio('beep-02.mp3');
+        sound.volume = 0.1;
+        sound.play();
+    }
 
     startup() { //Start up the program; Initializer
         this.pc = 0x200;
