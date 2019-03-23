@@ -207,6 +207,24 @@ input[type="color"] {
 }
 
 /*
+#sound {
+	font-family: "Comic Sans MS", "Comic Sans", arial, helvetica, sans-serif;
+	position: fixed;
+	top: 25px;
+	left: 25px;
+	display: none;
+
+	background-color: white;
+	border: black 3px solid;
+	border-radius: 18px;
+	padding: 15px;
+	box-shadow: #000 3px 3px 8px 1px;
+}
+
+#sound.playing {
+	display: block;
+}
+
 #bleh {
 	color: white;
 	font-family: Arial, Helvetica, sans-serif;
