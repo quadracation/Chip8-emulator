@@ -2,19 +2,18 @@
 /* MAIN BODY */
 /* ----------------------------------------------------------- */
 body {
-	font-family: 'Helvetica';
-	color: white;
+	color: black;
 	margin: 0px;
 	/* background: linear-gradient(0.6turn, grey, white); */
-	background: #1c1c1c;
+	background: white;
 }
 
 #wrapper {
 	background: rgba(58, 58, 58, 0.75);
-	border-top: white 2px solid;
-	border-bottom: white 2px solid;
+	border-top: #000 1px solid;
 	box-shadow: rgba(0,0,0,0.3) 0px 5px 10px inset;
 }
+
 
 
 /* ----------------------------------------------------------- */
@@ -206,7 +205,6 @@ input[type="color"] {
 	align-self: left;
 }
 
-/*
 #sound {
 	font-family: "Comic Sans MS", "Comic Sans", arial, helvetica, sans-serif;
 	position: fixed;
@@ -241,4 +239,3 @@ input[type="color"] {
 	animation-direction: alternate;
 	text-shadow: #fff 0px 0px 2px;
 }
-*/
