@@ -17,8 +17,7 @@ class CPU {
 
         this.keys = new Array(16); 											        //Stores what keys we press on the keyboard
 
-        
-        this.displayWidth  = 64 ; //64x32
+        this.displayWidth  = 64 ;                                                   //64x32
         this.displayHeight = 32;
         this.display       = new Array(this.displayHeight * this.displayWidth); 	//2048
         this.drawFlag      = false;                                                 //When to draw (trigger boolean)
@@ -39,11 +38,10 @@ class CPU {
     getRenderer()          { return this.renderer;                             }
     getOpcode()            { return this.opcode.toString(16).padStart(4, '0'); }
     getProgramCounter()    { return this.pc;                                   }
-    setRenderer(renderer)  { this.renderer = renderer;                         }                             //new Object
+    setRenderer(renderer)  { this.renderer = renderer;                         }     //new Object
     setStepForward(bool)   { this.stepForward = bool;                          }
 
     get paused() {
-        // Seriously guys, please be consistent.
         return this._isPaused; 
     }
 
@@ -53,12 +51,12 @@ class CPU {
 
     updateTimers() {
         if(this.delayTimer > 0) {
-            console.log("BLINK!");
+            // console.log("BLINK!");
             this.delayTimer--;
         }
 
         if(this.soundTimer > 0) {
-            console.log("SOUND!");
+            // console.log("SOUND!");
             this.beep();
             this.soundTimer--;
         }
@@ -88,13 +86,13 @@ class CPU {
         this.display[location] ^= 1;
         
         return !this.display[location]; //0 or 1
-
     }
   
     setRenderer(renderer) {
         this.renderer = renderer;
     }
   
+    /*
     randomizeMemory(){
         for(let i=0x200; i< 0x1000;i++){
             var num = Math.floor(Math.random() * 0xFF); //Special Thanks to: Ethan P. for "*0xFF"
@@ -104,6 +102,7 @@ class CPU {
         }
 
     }
+    */
 
     Hex2Bin(hex) {
         return parseInt(hex, 16).toString(2).padStart(8, '0');
@@ -159,22 +158,22 @@ class CPU {
             0xF0, 0x80, 0xF0, 0x80, 0x80  // F
         ];
 
-        for(let i = 0; i < this.memory.length; i++) { //Initializing/Defining Memory Array
-            this.memory[i] = 0; //Must do this first before hexChars or else other indexes = -1, not 0
+        for(let i = 0; i < this.memory.length; i++) {  //Initializing/Defining Memory Array
+            this.memory[i] = 0;                        //Must do this first before hexChars or else other indexes = -1, not 0
         }
     
-        for (let j = 0; j < hexChars.length; j++) { //Initializing locations 0 to 79 of memory 
+        for (let j = 0; j < hexChars.length; j++) {    //Initializing locations 0 to 79 of memory 
             this.memory[j] = hexChars[j];
         }
 
         this.initRegisters();
 
-        for(let k = 0; k < this.stack.length; k++) { //Initializing/Defining Stack
+        for(let k = 0; k < this.stack.length; k++) {   //Initializing/Defining Stack
             this.stack[k] = 0;
         }
 
 
-        for(let l = 0; l < this.keys.length; l++) { //Initializing/Defining Keys (store)
+        for(let l = 0; l < this.keys.length; l++) {    //Initializing/Defining Keys (store)
             this.keys[l] = false;
         }
 
@@ -193,8 +192,8 @@ class CPU {
 
         this.drawFlag     = false;
         this.paused       = false;
-	this.stepForward = false;
-	this.hasROM = false;
+    	this.stepForward = false;
+    	this.hasROM = false;
 
         this.delayTimer   = 0;
         this.soundTimer   = 0;
@@ -205,7 +204,6 @@ class CPU {
     
     drawOntoScreen() {
         //<somehow> load all HEX values from the .ch8 file
-
         //Parse and draw
         if(this.renderer !== null || this.renderer !== undefined) {
             this.renderer.render(this.display);
@@ -386,7 +384,7 @@ class CPU {
                 break;
 
             case 0xC000: // [CXNN]: Set V[X] = Random number from 0 to 255 & NN 
-                this.V[X] = (Math.floor(Math.random() * 0xFF) & NN) // 0xFF == int(255) Found this from: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
+                this.V[X] = (Math.floor(Math.random() * 0xFF) & NN) // 0xFF == int(255)
                 this.pc += 2;
                 break;
 
@@ -559,7 +557,7 @@ class CPU {
 
 } //class CPU
 
-// //special thanks to: ETHAN P.
+// special thanks to: ETHAN P.
 // function draw() {
 //     window.requestAnimationFrame(draw); // This MUST be called recursively
 // }
