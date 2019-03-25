@@ -27,7 +27,7 @@
             <div>
                     <!--ROM Loading area-->
                 <!--Idea: BROWSE through the computer's files for .ch8 files. NO DROP DOWN.-->
-                <input id="rom" type="file" class="button"/> <!--Input Tag: Input Tag name: ROM.Input Type: file selection/usage-->
+                <input id="rom" type="file" accept=".rom,.ch8,.aml" class="button"/> <!--Input Tag: Input Tag name: ROM.Input Type: file selection/usage-->
             </div>
             <div>
                 <!--Buttons: Pause/Reset-->
@@ -76,25 +76,25 @@
         <!--Keypad-->
         <!--This is called an Event Delegation-->
         <div class="keyPad" id="keyPad">
-            <button key="1" binding="1">[1]</button>   
-            <button key="2" binding="2">[2]</button>    
-            <button key="3" binding="3">[3]</button>    
-            <button key="C" binding="4">[C]</button>   
+            <button key="1" binding="1">1</button>   
+            <button key="2" binding="2">2</button>    
+            <button key="3" binding="3">3</button>    
+            <button key="C" binding="4">C</button>   
 
-            <button key="4" binding="q">[4]</button>  
-            <button key="5" binding="w">[5]</button> 
-            <button key="6" binding="e">[6]</button>   
-            <button key="D" binding="r">[D]</button> 
+            <button key="4" binding="q">4</button>  
+            <button key="5" binding="w">5</button> 
+            <button key="6" binding="e">6</button>   
+            <button key="D" binding="r">D</button> 
 
-            <button key="7" binding="a">[7]</button> 
-            <button key="8" binding="s">[8]</button>  
-            <button key="9" binding="d">[9]</button>  
-            <button key="E" binding="f">[E]</button> 
+            <button key="7" binding="a">7</button> 
+            <button key="8" binding="s">8</button>  
+            <button key="9" binding="d">9</button>  
+            <button key="E" binding="f">E</button> 
 
-            <button key="A" binding="z">[A]</button>  
-            <button key="0" binding="x">[0]</button>  
-            <button key="B" binding="c">[B]</button> 
-            <button key="F" binding="v">[F]</button> 
+            <button key="A" binding="z">A</button>  
+            <button key="0" binding="x">0</button>  
+            <button key="B" binding="c">B</button> 
+            <button key="F" binding="v">F</button> 
         </div>
         
         <script>
@@ -125,9 +125,16 @@
     
 
     <!--Memory Box Area -->
-    <textarea id="memory" readonly></textarea>
+    <div id="memoryContainer">
+        <table id="memory">
+            <tr>
+                <th id="oc">OPCODE: --</th>
+                <th id="pc">PC: --</th>
+            </tr>
+        </table>
+    </div>
 
-    <br><br><br><br><br>
+    <br>
 
 </div> <!--DIV: Wrapper-->
 
@@ -158,8 +165,8 @@
 <!-- =================================================================================================================== -->	
 <!-- Memory box (: Will add more soon! -->
 <script>
-    let memo = document.getElementById("memory");
-    let memArr = cpu.getMemory();
+    // let memo = document.getElementById("memory");
+    // let memArr = cpu.getMemory();
 
     var updateRegisters = function() {
         reg0.innerText  = "V0:\n" + cpu.getRegisterItem(0);
@@ -183,21 +190,23 @@
     
 
    let count = 0;
+   let ocBox = document.getElementById("oc");
+   let pcBox = document.getElementById("pc");
     
     setInterval(function() {
             try {
-                if(cpu.hasROM && count < 200) {
+                if(cpu.hasROM) {
                     cpu.cycle();
+                    let oc = cpu.getOpcode();
                     let pc = cpu.getProgramCounter();
                     if(cpu.getOpcode() > 0 && (!cpu.paused || cpu.stepForward)) {
                         if(cpu.stepForward) cpu.stepForward = false;
-                        memo.textContent += "Opcode: " + cpu.getOpcode() + "\nPC: " + pc +"\n\n";
-                        count++;
+                        ocBox.textContent = "OPCODE: " + oc;
+                        pcBox.textContent = "PC: " + pc;
                     }
                 }
                 else {
-                    memo.innerText = "";
-                    count = 0;
+                    // count = 0;
                 }
                 
             } catch (ex) {
@@ -208,7 +217,6 @@
 
     function render() {
         cpu.renderer.render(cpu.getDisplayArray());
-        scrollToBottom();
         updateRegisters();
         window.requestAnimationFrame(render);
     }
@@ -252,12 +260,13 @@
         }
     };
 
-    var scrollToBottom = function() {
-        let height = memo.getBoundingClientRect().height;
-        if (Math.abs(memo.scrollHeight - memo.scrollTop - height) < 70) {
-            memo.scrollTop = memo.scrollHeight - height;
-        }
-    };
+    //Don't need this anymore. 
+    // var scrollToBottom = function() {
+    //     let height = memo.getBoundingClientRect().height;
+    //     if (Math.abs(memo.scrollHeight - memo.scrollTop - height) < 70) {
+    //         memo.scrollTop = memo.scrollHeight - height;
+    //     }
+    // };
 
    // New Key Lookup Table
     window.addEventListener('keydown', function(e) { 
@@ -283,7 +292,8 @@
 
     var resetScreen = function() {
         cpu.reset();
-        memo.textContent = "";
+	oc.textContent = "OPCODE: --";
+	pc.textContent = "PC: --";
         document.getElementById("colourPicker_BG").value = "#000000";
         setPixelColour_BG("colourPicker_BG");
         document.getElementById("colourPicker_FG").value = "#ffffff";

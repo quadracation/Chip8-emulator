@@ -14,7 +14,7 @@ On January 4th 2019, prof. Toby Donaldson tasked each group to document their pl
 <br><br>
 
 
-<p style="border:1px; border-style:solid; border-color:#FF000; padding: 1.5em; width: 330px; height: 320px;">
+<p style="border:1px; border-style:solid; border-color:#FF000; padding: 1.5em; width: 330px; height: 340px;">
 
 <font size = "5"> 
 Table of Contents <br> 
@@ -23,15 +23,16 @@ Table of Contents <br>
 <font size = "3">
   1. <a href = "#change"> Release Update: Changes, Plans, and More! </a> <br>
   2. <a href = "#reflections"> Release Update: Reflections </a> <br>
-  3. <a href = "#use"> Use Cases </a> <br>
-  4. <a href = "#roles"> Roles </a> <br>
-  5. <a href = "#meetings"> Meeting Times & Communication </a> <br>
-  6. <a href = "#language"> Language Choice & Software Repository </a> <br>
-  7. <a href = "#methodology"> Project Methodology </a> <br>
-  8. <a href = "#scheduling"> Project Scheduling </a> <br>
-  9. <a href = "#risks">  Risk Analysis/Management </a> <br>
-  10. <a href = "#quality"> Quality Assurance </a> <br>
-  11. <a href = "#cite"> Citations </a><br>
+  3. <a href = "#use1"> Use Cases: Goals </a> <br>
+  4. <a href = "#use2"> Use Cases: Manual </a> <br>
+  5. <a href = "#roles"> Roles </a> <br>
+  6. <a href = "#meetings"> Meeting Times & Communication </a> <br>
+  7. <a href = "#language"> Language Choice & Software Repository </a> <br>
+  8. <a href = "#methodology"> Project Methodology </a> <br>
+  9.  <a href = "#scheduling"> Project Scheduling </a> <br>
+  10. <a href = "#risks">  Risk Analysis/Management </a> <br>
+  11. <a href = "#quality"> Quality Assurance </a> <br>
+  12. <a href = "#cite"> Citations </a><br>
 </font>
 </p>
 
@@ -40,10 +41,98 @@ Table of Contents <br>
 
 **<h1> <font size = "6"> <a id = "change"></a> Release Updates: Changes, Plans, and More! </font> </h1>**
 <font size = "3">
-**Welcome to the ~~first~~ Second Release Update!** 
+**Welcome to the ~~first~~ ~~second~~ Third Release Update!** 
 <br>In this section, we will list what changes have been made to our procedures/methodologies as well as any other additional decisions that have been reached. The *Update* section is to help our "customers" efficiently review our document when necessary. 
 
 <br>
+
+**<h2><font size="5"> March 13th </font></h2>**
+- **[NEW]: Accomplishments**
+  - We were able to implement the `STEP FORWARD` Feature, where the user can now lick on the button while the Emulator is Paused to race exactly one step forward.
+
+  - Two new games were created:
+    1. PONG (remake):
+        - Move: *P1: [1][A]; P2: [4][F]*
+      
+    2. ENDLESS FUSE (custom):
+        - Objective: *Extend the fuse. Custom take on SNAKE*
+        - Move: *[W][A][S][D]*
+        - Place *Fuse Line: [E]*
+        - Lose State: *Press [E] to restart*
+
+  - Emulator can now load most (if not all) original CHIP-8 ROMs. 
+
+  - An Easter Egg has been added to the Emulator when the user types in `tobydonalson`.
+
+  - The user can now change the pixel colors for both the Foreground and the Background. 
+
+  - KeyPress was implemented om both Keyboard and Mouse (via KeyPad)
+
+  - Sound Trigger (no sound)
+    - We are able to detect when the soundTimer has been activated and will give a visual representation of a `BEEP!` on the top-left-hand corner of the screen. 
+
+  - An intermediate stage of our U.I. That is, a design has been chosen for `index.html`. <br><br>
+  ![index.html Site](https://cdn.discordapp.com/attachments/530971810670575616/555583121890869258/unknown.png)
+
+  - Team#16 Logo has been created: `XIV`. <br>
+  ![Team Logo](https://media.discordapp.net/attachments/530971810670575616/553071860099842068/Logo.png)
+
+  - All Opcodes have been tested with most (if not all) original CHIP-8 ROMs. Functionality has been confirmed to work properly.
+   
+<br>
+
+- **[MANUAL]: How to use our program**
+  - Details for this section can be found in the new <a href="#use2">Manual: Use Cases</a> section of the project document.
+
+  - Load the Emulator site through **index.html** and our online Tool using **pixelEditor.html**. 
+
+  - Recommended Window Zoom-in Size: **90%**
+
+  - You can test out our Automated Testing Framework using the instructions provided in the <a href="#quality"> Quality Assurance</a> section.
+  
+<br>
+
+- **[UPDATE]: Remaining Task Spillage**
+  - Implementing Sound to internal ROMs.
+  
+  - Triggering sound for all ROMs (external and internal).
+
+  - `index.html` Updates:
+    - Colour Theme/Palette is to be decided on and implemented.
+    - Font Set is to be decided on and implemented.
+
+  - STEP BACK (up to 5 previous states) 
+
+
+
+<br>
+
+- **[UPDATE]: Team Work Distribution**
+  - **Wassim**: Internal ROM remake: PONG
+  
+  - **Ben**: Internal ROM (custom): ENDLESS RUSE
+  
+  - **Linh**: Updating `index.html`, overlooking ROM creation, and Testing OpCodes and ROMs.
+
+  - **William**: Polishing the Pixel Editor Tool 
+
+  - **Ian**: Polishing the Pixel Editor Tool and Testing ROMs. 
+
+<br>
+
+- **[PLAN]: Next Team Work Distribution**
+  - **Wassim**: Implementing and Triggering SOUND & creating new ROMs
+  
+  - **Ben**: Assisting in Final Presentation & creating new ROMs
+  
+  - **Linh**: Updating `index.html` & Final Testing and Quality Assurance
+
+  - **William**: Managing Final Presentaton & creating new ROMs
+
+  - **Ian**: Final Testing and Quality Assurance & creating new ROMs
+
+
+<br><br>
 
 **<h2><font size="5"> February 27th </font></h2>**
 
@@ -67,6 +156,11 @@ Table of Contents <br>
 
 <br>
 
+- **[UPDATES]: Testing Framework**
+   - Due to the complications the Group has faced when using GULP, we decided to switch to using *MOCHA* and *CHAI*. 
+
+<br>
+
 - **[UPDATES]: Remaining Task Spillage**
 
     - Due to earlier delays, Group#16 still lacks Higher Designs for the ```index.html``` file. The page is currently left at its default design until further Releases. 
@@ -76,17 +170,18 @@ Table of Contents <br>
     - The `index.html` file is lacking the STEP-BACK/STEP-FORWARD feature. This has been taken into account for the upcoming Release 3. Roles have been administered and implementation has begun. 
 
     - Sound and Keypresses are part of the spillage. However, those responsible for creating ROM files for the CHIP-8 System are tasked with completing these operations. 
-    
+
+
 <br>
 
-- **[UPDATE]: How to use our Program**
+- **[MANUAL]: How to use our Program**
   
     1. Load up `index.html` in the `.zip` file. 
     2. Have a prepared CHIP-8 ROM File. 
     3. Select *Browse* at the top of the page and select your ROM File. 
     4. See that it works. (*Sorry, no key presses this Release*)
     5. See that the Memory Box works.
-    6. Press <kbd>P</kbd> on your Keyboard for click `Play/Pause` to see that it works.
+    6. Press `P` on your Keyboard for click `Play/Pause` to see that it works.
 
 
 <br>
@@ -105,7 +200,7 @@ Table of Contents <br>
 
 <br>
 
-- **[UPDATES]: Team Distribution for Release 3**
+- **[PLAN]: Team Distribution for Release 3**
 
     - For the upcoming Release, as said above, Role Distributions have been administered to each member of the Group. 
 
@@ -205,6 +300,7 @@ In this Release, the Team was met with various challenges.
 In the beginning, members struggled with understanding the syntax of Javascript as it offered several options for the same form of functionality (e.g., how to create a function & prototypes). Due to our inexperience, we were not familiar with any form of Automated Testing, which dictated extensive research and causing delays in our schedule. Even now, testing is being developed for future Releases. Due to our lack of understanding of bitwise functions and bitshifting, we struggled with implementing the opcode instructions. This resulted in us having to seek help through Online Tutorials and Resources such as W3Schools and StackOverflow. This lack of understanding resulted in long delays to our original schedule. This implies (correctly) that our Automated Testing phase is only in its development stage and will be used after this Release. 
 
 Despite all of our hardships, Team#16 was able pull through and deliver almost all of the features we had planned to implement. This includes:
+
 - Implementing and Running/Testing OpCodes,
 - Allocating Memory and linking them to the OpCode for Testing, 
 - Having an Infinite Loop for running out project scripts,
@@ -230,11 +326,26 @@ Group#16 has come to the realization that working together in person has proven 
 
 <br>
 
+**<h2><font size="5"> Release 3: March 13th </font></h2>**
+<font size = "3"> 
+This Release has given the group a new outlook on Scheduling and Work Ethics, in combination with Teamwork. The heavy delays let Group members realize the feeling of urgency and low level panic. This resulted in a unified time span of heightened team performance. In other words, the Group was able to work together and produce quick results. Members were split up into their specialities and tasked to implement various features. The sense of urgency as well as daily updates and reports helped keep members on track and working. 
+
+We found that keeping a clean GitHub repository leads to better Work Flow management and better Version Control. Our current GitHub repository is quite the mess with numerous outdated branches and various files. The Master Branch suffered from containing outdated files up until recently. These difficulties resulted in team-wide confusion for a prolonged amount of time. 
+
+Those tasked with creating games were able to produce 2 games: one being custom-made and another a remake of the classic `PONG` game. 
+
+In the future, Group members agree to take time and create an in-depth design plan for both the Program architecture and the GitHub repository. One suggestion includes having personal branches with the naming convention `[name]-[date:mm/dd]-work`. 
+
+
+</font>
+
+<br>
+
 ___
 ___
 <br><br>
 
-**<h1> <font size = "6"> <a id = "use"></a> Purpose: Project Use Cases </font> </h1>**
+**<h1> <font size = "6"> <a id = "use1"></a> Goals: Project Use Cases </font> </h1>**
 <font size = "3">
 In Software Engineering, Use Cases typically define as a list of events carried out through the interacting of both the *User* and the *Software*. Below is a breakdown for each Release's use cases:
 
@@ -278,6 +389,41 @@ Once the testing phases have been documented and completed (i.e., any/all report
 At the end of the term, Group#16 will have a fully funcitonal CHIP-8 System with multiple games, an essential tool (or more), and an effective graphical interface to display their efforts. Now that the journey for Group#16 has ended, we believe that the final Release holds a special **Educational** Use Case for all the members. 
 
 With the repository complete and the Project Document in its final stage, members will be able to look back on this accomplishment one day as a source of pride. The final submission will introduce a new experience and the cultivation of each individual's skills as a programmer and a cooperative team member. It is hoped that members of Group#16 bring this new experience onward to the future to help aid them in future projects. 
+
+<br><br>
+
+**<h1> <font size = "6"> <a id="use2"></a> Manual: Project Use Cases </font> </h1>**
+<br> **<font size = "5"> [ Release 1 ] </font>** <br>
+<font size = "3">
+The Users for this Release are primarily the Group Members. Since there is no real UI on the Web, no interactions are available. Group members will be using GitHub in order to manage version control and work flow. 
+ </font>
+
+<br> **<font size = "5"> [ Release 2 ] </font>** <br>
+<font size = "3"> 
+The Visualizer is now implemented. Users will include others outside of the group along with the group members. 
+
+- Click the `BROWSE` Button to Choose a ROM to run from somewhere in the user's PC Files. 
+- Press `P` to toggle the PAUSE/PLAY Button. 
+- Click `RESET` to reset the state of the entire Emulator, including the loaded ROM file. 
+
+</font>
+
+
+<br> **<font size = "5"> [ Release 3 ] </font>** <br>
+<font size = "3">
+The Visualizer is now complete. Users include others outside of the grou palong with the group members.
+
+- Click the `BROWSE` Button to Choose a ROM to run from somewhere in the user's PC Files. 
+- Press `P` or Click `PLAY/PAUSE` to toggle the PAUSE/PLAY Button. 
+- Click `RESET` to reset the state of the entire Emulator, including the loaded ROM file. 
+- Click `STEP FORWARD` when Paused to trace one step forward. 
+- Enter by Keyboard or Click on the KeyPad Buttons to give input for Key Controls. 
+
+</font>
+
+
+<br> **<font size = "5"> [ Release 4 ] </font>** <br>
+**Unavailable**
 
 <br><br>
 
@@ -553,7 +699,9 @@ As members of the group follow the intended schedules for each Release, it quick
 Continuous tests will be conducted throughout the making of the product to ensure the functionality of the current program. For the time being, this will be done *manually* (until an automated option is available) by designated <a href = "#roles"> Testers</a> that will be supplied with a (frequently updated) test file. Its purpose is to check all logical applications ranging from **Unit Tests** (basic functions and operations (e.g., validating logic and opcode functionality)) to **System Tests** (i.e., all functions run cooperatively and correctly once joined). In addition, a large proportion of the file will be committed to test for [Software Regression](https://en.wikipedia.org/wiki/Software_regression) in order to minimize bugs (however (non-) trivial).  
 <br>
 
-**To Use** <br>
+**How to use the Automated Testing Framework:** 
+<br>
+
 As explained in earlier sections, theTeam has migrated over to using TravisCI as its primary Automated Testing Tool with the backing of CHAI for extra Assertions, Expectancies; etc. Because TravisCI works as a contrinuous Integration Software, it is able to link up with Github. 
 
 Members/Testers must install TravisCI and well as Chai inside their terminal. More information can be found online as there are countless resources to help give clear instructions. 
@@ -589,7 +737,7 @@ The test file contains main functional testing to ensure that regular operations
 
 <br>
 
-**<h3><font size = "5">Release 1 & 2 </font></h3>**
+**<h3><font size = "5">Release 1(+) </font></h3>**
 
 -  [1] L. Muller, “How to write an emulator (CHIP-8 interpreter),” in Multigesture, -[Online], availible at -http://www.multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/, -2011.
 
@@ -653,14 +801,12 @@ The test file contains main functional testing to ensure that regular operations
 
 - [28] “Using files from web applications,” MDN Web Docs, 22-Jan-2019. [Online]. Available: https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications. [Accessed: 20-Feb-2019]. 
 
+- [29] A. Rasha, Helped with Sound Recognition, Helped on March 5th, 2019 via Face-to-Face.
 
-**<h3><font size = "5">Release 3 </font></h3>**
+- [30] B. Chen, Helped with Keypress & Binding, Helped on March 7th, 2019 via Face-to-Face.
 
-- [29] Code Club, "Pixel Art", in Code Club Projects, [Online], available at https://codeclubprojects.org/en-GB/webdev/pixel-art/, 2012.
-  
-- [30] w3schools, “onkeypress Event”, in w3schools.com, [Online], available at https://www.w3schools.com/jsref/event_onkeypress.asp, 1999.
+- [31]  Code Club, "Pixel Art", in Code Club Projects, [Online], available at https://codeclubprojects.org/en-GB/webdev/pixel-art/, 2012.
 
-<br>
 
 </font>
 
