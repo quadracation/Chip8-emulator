@@ -19,7 +19,7 @@ ROM.addEventListener('change', (event) => {										//Whenever someone changes 
 		cpu.reset();															//Begin CPU's startup. Reset/Initialize CPU as an object.
 		cpu.startup();															//Re-define CPU's memory and HEX Table.
 		cpu.getMemory().set(dataTrimmed, 0x200);								//.set(...) does not care about the file length, and will most likely overload the Uint8Array. That is why we trimmed.
-																//Load the game that has been stored into the Chip8 System's memory.
+																				//Load the game that has been stored into the Chip8 System's memory.
 		console.log(dataTrimmed);
 		cpu.paused = false;
 		cpu.hasROM = true;

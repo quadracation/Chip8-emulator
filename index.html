@@ -14,13 +14,10 @@
 <!--Title Display-->	
 <div>
     <center><img src="Logo.png" alt="Team#16" width="100" id="logo"></center>
-    <br><br>
-    <marquee id="bleh" behavior= "Scroll" direction= "left"><div>Team #16 Presents: CHIP-8 Emulator</div></marquee>
+    <center><font size="20">Group 16's CHIP-8 Emulator</font></center>
 </div>
 <br>
-<div id="sound">
-    Beep!
-</div>
+
 <div id="wrapper">	
     <div class="buttonGroup">    
             <!--Buttons-->	
@@ -225,22 +222,6 @@
 
     setInterval(function() {
         cpu.updateTimers();
-
-        let soundTimeout = null;
-
-        // how does one sound?
-        if (cpu.soundTimer > 0) {
-            document.getElementById('sound').classList.add('playing');
-            
-            if (soundTimeout != null) {
-                clearTimeout(soundTimeout);
-            }
-
-            soundTimeout = setTimeout(() => {
-                soundTimeout = null;
-                document.getElementById('sound').classList.remove('playing');
-            }, 400);
-        }
     }, 1000/60); //60 times a second
 
 
@@ -309,10 +290,7 @@
 
     render();
 
-</script>
-<!-- =================================================================================================================== -->	
-
-<script>    
+    /*
     var loadHexTest = function() {
         var testHex = [
             0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -370,7 +348,10 @@
             leet = 0;
         }
     }
+    */
+
 </script>
+<!-- =================================================================================================================== -->	
 
 </body>
 

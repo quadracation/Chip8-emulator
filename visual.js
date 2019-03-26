@@ -7,7 +7,7 @@ var Renderer= function(canvas, givenH, givenW, cellScalar, BGclr, FGclr){
         
     this.scalar  = cellScalar;                                   //1px is too small. Used a scalar defined in index.html
 
-    this.BGColour = BGclr; //String input "#aabbccdd"
+    this.BGColour = BGclr;                                       //String input "#aabbccdd"
     this.FGColour = FGclr;
     
 };
