@@ -5,8 +5,8 @@ body {
 	font-family: 'Helvetica';
 	color: white;
 	margin: 0px;
-	/* background: linear-gradient(0.6turn, grey, white); */
-	background: #1c1c1c;
+	background: linear-gradient(0.1turn, black, grey);
+	/*background: #1c1c1c; */
 }
 
 #wrapper {
@@ -224,6 +224,7 @@ input[type="color"] {
 #sound.playing {
 	display: block;
 }
+*/
 
 #bleh {
 	color: white;
@@ -241,4 +242,4 @@ input[type="color"] {
 	animation-direction: alternate;
 	text-shadow: #fff 0px 0px 2px;
 }
-*/
+
