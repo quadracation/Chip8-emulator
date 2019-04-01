@@ -30,6 +30,11 @@
                 <!--Buttons: Pause/Reset-->
                 <button class="button" style="float:left" onclick="cpu.pause()">PLAY/PAUSE</button>
                 <button class="button" style="float:left" onclick="resetScreen()">RESET</button>
+                <div style="float:left;height:48px;border-left:#333 1px solid;color:transparent">-----</div>
+                <button class="button" style="float:left" onclick="stepBackward()">STEP BACK: (x1)</button>
+                <button class="button" style="float:left" onclick="stepBackward(10)">(x10)</button>
+                <button class="button" style="float:left" onclick="stepBackward(50)">(x50)</button>
+                <div style="float:left;height:48px;border-left:#333 1px solid;color:transparent">-----</div>
                 <button class="button" style="float:left" onclick="stepForward()">STEP FORWARD</button>
             </div>   
             <div>
@@ -191,12 +196,13 @@
    let pcBox = document.getElementById("pc");
     
     setInterval(function() {
+        for (let i = 0; i < 7; i++) {
             try {
                 if(cpu.hasROM) {
                     cpu.cycle();
                     let oc = cpu.getOpcode();
                     let pc = cpu.getProgramCounter();
-                    if(cpu.getOpcode() > 0 && (!cpu.paused || cpu.stepForward)) {
+                    if(cpu.getOpcode() > 0) {
                         if(cpu.stepForward) cpu.stepForward = false;
                         ocBox.textContent = "OPCODE: " + oc;
                         pcBox.textContent = "PC: " + pc;
@@ -210,7 +216,8 @@
                 cpu.paused = true;
                 throw ex;
             }
-        },1000/500); // 500 times a second
+        }
+    },10); // 100 times a second, 7 instructions each
 
     function render() {
         cpu.renderer.render(cpu.getDisplayArray());
@@ -236,10 +243,22 @@
     };
 
     var stepForward = function() {
-        if(cpu.paused === true) {
-            cpu.stepForward = true; 
-        }
+        cpu.paused = true;
+        cpu.stepForward = true; 
     };
+
+    var stepBackward = function(number) {
+        cpu.paused = true;
+
+        if (number == null) {
+            number = 1;
+        }
+
+        while (number > 0) {
+            cpu.undo();
+            number--;
+        }
+    }
 
     //Don't need this anymore. 
     // var scrollToBottom = function() {
@@ -325,6 +344,7 @@
         }
     }
 
+    //PUT THIS BACK IN!!! ):<
     let yeet = 'tobydonaldson';
     let leet = 0;
     window.onkeydown = function(ev) {
