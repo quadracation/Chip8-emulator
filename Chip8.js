@@ -198,6 +198,8 @@ class CPU {
         this.delayTimer   = 0;
         this.soundTimer   = 0;
 
+        this.undoData = [];
+
         this.startup();
 
     } //function RESET()
@@ -231,8 +233,45 @@ class CPU {
         return (x + 256) % 256; 
     }
 
+    undo() {//load the state from the undo array
+        const top = this.undoData.pop();
+
+        if (top == null) {
+            console.log("Nothing to undo.");
+            return;
+        }
+
+        this.memory = top.memory;
+        this.pc = top.pc;
+        this.V = top.regV;
+        this.I = top.regI;
+        this.delayTimer = top.regD;
+        this.display = top.display;
+        this.stack = top.stack;
+        this.stackPointer = top.stackPointer;
+    }
+
+    saveUndo() { //Save the state to the undo array
+        if (this.undoData.length > 1000) { //Make sure the max length is 1000
+            this.undoData.shift();
+        }
+
+        this.undoData.push({
+            memory: this.memory.slice(0),
+            pc: this.pc,
+            regV: this.V.slice(0),
+            regI: this.I,
+            regD: this.delayTimer,
+            display: this.display.slice(0),
+            stack: this.stack.slice(0),
+            stackPointer: this.stackPointer
+        });
+    }
+
     cycle() { //Running the program. Initialized outside of this file in an infinite loop
         if(this.paused !== true || this.stepForward == true) {
+
+        this.saveUndo();
     
         this.opcode = this.memory[this.pc] << 8 | this.memory[this.pc+1];
         // console.log("PC: " + this.pc);    
@@ -556,10 +595,3 @@ class CPU {
 
 
 } //class CPU
-
-// special thanks to: ETHAN P.
-// function draw() {
-//     window.requestAnimationFrame(draw); // This MUST be called recursively
-// }
-
-// window.requestAnimationFrame(draw);
