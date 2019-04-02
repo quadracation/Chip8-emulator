@@ -252,7 +252,7 @@ class CPU {
     }
 
     saveUndo() { //Save the state to the undo array
-        if (this.undoData.length > 1000) { //Make sure the max length is 1000
+        if (this.undoData.length > 1500) { //Make sure the max length is 1500...Wouldn't go more than this.
             this.undoData.shift();
         }
 
