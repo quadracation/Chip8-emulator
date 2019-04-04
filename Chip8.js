@@ -58,7 +58,7 @@ class CPU {
         if(this.soundTimer > 0) {
             // console.log("SOUND!");
             this.beep();
-            this.soundTimer--;
+            this.soundTimer = 0;
         }
     }
 
