@@ -22,7 +22,7 @@ Table of Contents <br>
 
 <font size = "3">
   1. <a href = "#change"> Release Update: Changes, Plans, and More! </a> <br>
-  2. <a href = "#reflections"> Release Update: Reflections </a> <br>
+  2. <a href = "#reflections"> Release Update: Reflections & Post Mortem </a> <br>
   3. <a href = "#snapshots"> Release Update: Progress Snapshots </a> <br>
   4. <a href = "#use1"> Use Cases: Goals </a> <br>
   5. <a href = "#use2"> Use Cases: Manual </a> <br>
@@ -316,7 +316,7 @@ Table of Contents <br>
 
 <br><br>
 
-**<h1> <font size = "6"> <a id = "reflections"></a> Release Updates: Reflections</font> </h1>**
+**<h1> <font size = "6"> <a id = "reflections"></a> Release Updates: Reflections & Post Mortem</font> </h1>**
 <font size = "3">
 
 **<h2><font size="5"> Release 1: February 6th (Initial) </font></h2>**
@@ -385,6 +385,18 @@ Since this will be the last update for this document, I (the Project Manager) as
  - When asked about the **project's level of difficulty**, members reported that despite the lack of guidance in class, the project was at a *medium* difficulty range and was manageable thanks to the many resources found online.
 
  - When asked about **what went well for them and what didn't**, some members have stated that while the methods of communication worked well, coordinating meetings seemed difficult. On the other hand, others have reported that while we were able to complete tasks well ahead of time and work well with one another on tasks, the distribution of contribution was severely imbalanced throughout the term. 
+
+ - When asked what they would have **done differently** knowing what they know now, it was a unanimous agreement that a large amount of time be invested into making the Emulation/CPU portion of the project work. Having some form of visualization of output would have been very useful when we were first developing the Emulation. For us, Release 1 turned out to be one of the most important Releases, following Release 4. 
+
+ - When asked about the **biggest unexpected challenge** we encountered, many of us agreed that it be making the Emulator working along with loading ROMs. They both took up a significant amount of time as well as several people working together at once. 
+   - This follows up with advice given to future students: Do proper research ahead of time and plan accordingly and regularly. 
+
+ - When asked about the **worth of testing**, some answered with "yes," saying that it helped keep track of basic features and operations such as ensuring that our OpCodes were working. Others begged to differ, saying that testing as much as we did served little value. 
+    - In terms of Automated testing, it served as only a foundation - a first line of defense if you will. Although we were able to learn how automated testing worked, we found that most of our testing was better done manually. 
+
+    - Manual Testing (unit, system, acceptance) served as one of our most important phases. We integrated testing with development, interleaving between the two as we went. With each new feature, Testers would run through all possible cases to an appropriate level. We could not have done this project had it not been for our strict, regular testing. It helped catch numerous bugs and countless errors. 
+   
+    TL;DR: [**Manual**]: Worth it; [**Automated**]: Kind of Worth it. 
 
  - When asked about their **favourite part(s)** when working on this project, some highlighted the game-making to be the most enjoyable, while others said that initializing the Emulator/CPU and Registers to be the most fun, as it was most comprehensible. Members who worked on the homepage also found the task enjoyable as it related to other fields of design. 
 
