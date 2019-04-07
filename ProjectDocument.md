@@ -14,7 +14,7 @@ On January 4th 2019, prof. Toby Donaldson tasked each group to document their pl
 <br><br>
 
 
-<p style="border:1px; border-style:solid; border-color:#FF000; padding: 1.5em; width: 330px; height: 340px;">
+<p style="border:1px; border-style:solid; border-color:#FF000; padding: 1.5em; width: 330px; height: 370px;">
 
 <font size = "5"> 
 Table of Contents <br> 
@@ -23,16 +23,17 @@ Table of Contents <br>
 <font size = "3">
   1. <a href = "#change"> Release Update: Changes, Plans, and More! </a> <br>
   2. <a href = "#reflections"> Release Update: Reflections </a> <br>
-  3. <a href = "#use1"> Use Cases: Goals </a> <br>
-  4. <a href = "#use2"> Use Cases: Manual </a> <br>
-  5. <a href = "#roles"> Roles </a> <br>
-  6. <a href = "#meetings"> Meeting Times & Communication </a> <br>
-  7. <a href = "#language"> Language Choice & Software Repository </a> <br>
-  8. <a href = "#methodology"> Project Methodology </a> <br>
-  9.  <a href = "#scheduling"> Project Scheduling </a> <br>
-  10. <a href = "#risks">  Risk Analysis/Management </a> <br>
-  11. <a href = "#quality"> Quality Assurance </a> <br>
-  12. <a href = "#cite"> Citations </a><br>
+  3. <a href = "#snapshots"> Release Update: Progress Snapshots </a> <br>
+  4. <a href = "#use1"> Use Cases: Goals </a> <br>
+  5. <a href = "#use2"> Use Cases: Manual </a> <br>
+  6. <a href = "#roles"> Primary Role </a> <br>
+  7. <a href = "#meetings"> Meeting Times & Communication </a> <br>
+  8. <a href = "#language"> Language Choice & Software Repository </a> <br>
+  9. <a href = "#methodology"> Project Methodology </a> <br>
+  10. <a href = "#scheduling"> Project Scheduling </a> <br>
+  11. <a href = "#risks">  Risk Analysis/Management </a> <br>
+  12. <a href = "#quality"> Quality Assurance </a> <br>
+  13. <a href = "#cite"> Citations </a><br>
 </font>
 </p>
 
@@ -46,9 +47,32 @@ Table of Contents <br>
 
 <br>
 
+**<h2><font size="5">April 8th: D-Day</font></h2>**
+- **[NEW]: New Features & Status**
+  - For the final release of our Emulator, Team#16 was able to implement `STEP BACK`, which is able to account for the most recent 1500 steps (*x300 more than what we hoped for*). The user would then be  able to step back by **x1, x10, or x50 cycles** at a time. We recommend using the `x10` option for optimal visuals. 
+    - This feature is implemented as 3 buttons, unbindable to the keyboard. Users can click on the buttons to trigger this event. Step Back is only usable when the Emulator is Paused. 
+
+  - The sound trigger has been taken out. In return, functioning sound has been added into the Emulator. We use a loaded MP3 file which is triggered everytime the timer has reached a specific value(x), lasting for another value(y). It is automatically triggered and determined by the running ROM. 
+
+  - Homepage text-font has been changed from a Serif font to Sans Serif. 
+
+  - System performance has been Optimized, resulting in a much faster Emulator. This will hopefully let the user experience a more modern and fun time using our Emulator.  
+
+<br>
+<img src="https://cdn.discordapp.com/attachments/414977338367803394/564563005816438784/unknown.png"></img>
+  
+<br><br>
+
+- **[UPDATE]: Changes to Old Features**
+   - Alterations to the homepage were made: The colour, background, and design were improved with subtle add-ons like borders and gradient. 
+
+  - The previous Easter Egg was taken out. We felt that although it was a fun additive, it held little value for the project. We feared that it would hinder the professionalism effect the homepage had. 
+
+<br>
+
 **<h2><font size="5"> March 13th </font></h2>**
 - **[NEW]: Accomplishments**
-  - We were able to implement the `STEP FORWARD` Feature, where the user can now lick on the button while the Emulator is Paused to race exactly one step forward.
+  - We were able to implement the `STEP FORWARD` Feature, where the user can now click on the button while the Emulator is Paused to race exactly one step forward.
 
   - Two new games were created:
     1. PONG (remake):
@@ -292,10 +316,10 @@ Table of Contents <br>
 
 <br><br>
 
-**<h1> <font size = "6"> <a id = "reflections"></a> Release Updates: Reflections </font> </h1>**
+**<h1> <font size = "6"> <a id = "reflections"></a> Release Updates: Reflections</font> </h1>**
 <font size = "3">
 
-**<h2><font size="5"> Release 1: February 6th </font></h2>**
+**<h2><font size="5"> Release 1: February 6th (Initial) </font></h2>**
 In this Release, the Team was met with various challenges.
 In the beginning, members struggled with understanding the syntax of Javascript as it offered several options for the same form of functionality (e.g., how to create a function & prototypes). Due to our inexperience, we were not familiar with any form of Automated Testing, which dictated extensive research and causing delays in our schedule. Even now, testing is being developed for future Releases. Due to our lack of understanding of bitwise functions and bitshifting, we struggled with implementing the opcode instructions. This resulted in us having to seek help through Online Tutorials and Resources such as W3Schools and StackOverflow. This lack of understanding resulted in long delays to our original schedule. This implies (correctly) that our Automated Testing phase is only in its development stage and will be used after this Release. 
 
@@ -336,6 +360,91 @@ Those tasked with creating games were able to produce 2 games: one being custom-
 
 In the future, Group members agree to take time and create an in-depth design plan for both the Program architecture and the GitHub repository. One suggestion includes having personal branches with the naming convention `[name]-[date:mm/dd]-work`. 
 
+</font>
+
+<br>
+
+**<h2><font size="5"> Release 4: April 8th (Final) </font></h2>**
+<font size = "3"> 
+This term has been quite the roller coaster for everyone in our group. Being tasked with making something we’ve never heard of before along with learning several new frameworks and languages really made it a challenge for us. However, we did manage to pull through! <br>
+
+We believe that the AGILE Development Process really does work well in a small team. Having experienced it first-hand, this project has opened our eyes to new exploratory grounds. In the beginning of the term, we tried our best following a pre-made schedule with estimated numbers. We though that, since there were 5 of us, we could pull it off in no time. Members soon found out that there exists countless cases that would lead to delays. 
+
+Learning about Agile SW Dev. in class, we were able to quickly follow the Agile principles. This included being able to ...
+  - **quickly responding to changes** rather than following a schedule, 
+  - **re-define requirements** as we went along, 
+  - **splitting large tasks** into smaller tasks one step at a time, 
+  - **planning our work-load on a weekly basis** rather than monthly, and 
+  - **learning how to effectively communicate** with one another to get jobs done as quickly as possible. This included short messages through networks, as well as stand up meetings.
+
+<br>
+
+Since this will be the last update for this document, I (the Project Manager) asked members how they felt throughout the term. 
+ - When asked **how they felt about how they felt about the Project**, many responded with it being disinteresting for a Software Engineering course, and that the lack of Instructions made the process more difficult than it had to be in a learning stand-point. At times, members would be become frustrated with the project and behave passive-aggressively. This was due to our own scheduling problems on top of personal obligations
+
+ - When asked about the **project's level of difficulty**, members reported that despite the lack of guidance in class, the project was at a *medium* difficulty range and was manageable thanks to the many resources found online.
+
+ - When asked about **what went well for them and what didn't**, some members have stated that while the methods of communication worked well, coordinating meetings seemed difficult. On the other hand, others have reported that while we were able to complete tasks well ahead of time and work well with one another on tasks, the distribution of contribution was severely imbalanced throughout the term. 
+
+ - When asked about their **favourite part(s)** when working on this project, some highlighted the game-making to be the most enjoyable, while others said that initializing the Emulator/CPU and Registers to be the most fun, as it was most comprehensible. Members who worked on the homepage also found the task enjoyable as it related to other fields of design. 
+
+ - Members were also asked about what **advice they would give to future students** of the Spring 201X class. 
+    - Some said that future students should spend time early in the term researching on the frameworks, systems, and programming language. 
+    
+    - Others also suggest that members not be afraid to spend time figuring out what each person in their group is good at and setting up tasks suitable for them (this follows the AGILE manifesto: People, not Process). 
+    
+    - Setting up a schedule for meetings early on works well for everyone as well, as it would establish a means of communication right from the get-go to reduce missed time with members. 
+    
+    - Remember to behave respectfully so that members of the group enjoy working with you, since you will be with them (involuntarily) for the following 4 months. 
+    
+    - A tip for new students would be to get started on the Emulator/CPU aspect of the project as soon as possible, as it takes up the most amount of time compared to the rest. 
+
+<br>
+
+In the end, our group was able to pull through and create a project we are proud of. Despite the many challenges our team faced throughout the term, members were able to learn new frameworks, languages, and concepts that they had previously not known about. We hope to take this experience into the future and further develop ourselves into better developers and team mates working under the Agile development process. 
+
+</font>
+
+<br><br>
+
+**<h1> <font size = "6"> <a id = "snapshots"></a> Release Updates: Progress Snapshots</font> </h1>**
+<font size = "3">
+The following were taken from our communication channels, ordered from oldest to newest. Dates follow the MM/DD/YYYY convention.
+
+<br>
+
+**<center>02/14/2019</center>**
+<img src="https://i.gyazo.com/thumb/1200/fb553f1281ad253ba7403f21cfa0d0bb-png.jpg"></img>
+
+<br><br>
+
+**<center>03/04/2019</center>**
+<img src="https://cdn.discordapp.com/attachments/414977338367803394/564566169185419264/unknown.png"></img>
+
+<br><br>
+
+**<center>03/06/2019 (1)</center>**
+<img src="https://cdn.discordapp.com/attachments/414977338367803394/564566330242498561/unknown.png"></img>
+
+<br><br>
+
+**<center>03/02/2019 (2)</center>**
+<img src="https://media.discordapp.net/attachments/414977338367803394/564566713681838081/unknown.png"></img>
+
+<br><br>
+
+**<center>03/16/2019</center>**
+<img src="https://media.discordapp.net/attachments/530894228696465411/556685077132869657/Screen_Shot_2019-03-16_at_8.47.35_PM.png"></img>
+
+<br><br>
+
+**<center>03/21/2019</center>**
+<img src="https://cdn.discordapp.com/attachments/530894228696465411/558500991675269130/Screen_Shot_2019-03-21_at_9.03.04_PM.png"></img>
+
+<br><br>
+
+**<center>03/27/2019</center>**
+<img src="https://cdn.discordapp.com/attachments/414977338367803394/564568304883204126/unknown.png"></img>
 
 </font>
 
@@ -595,7 +704,7 @@ Notice that the projected numbers on each bar of the provided graphs overlaps th
 
 |                                       |
 | ------------------------------------- |
-| **Current Status:** SLIGHTLY BEHIND   | 
+| **Current Status:** COMPLETE (ON SCHEDULE)      | 
 |                                       |
 
 
@@ -807,6 +916,7 @@ The test file contains main functional testing to ensure that regular operations
 
 - [31]  Code Club, "Pixel Art", in Code Club Projects, [Online], available at https://codeclubprojects.org/en-GB/webdev/pixel-art/, 2012.
 
+- [32] J. Ortega, Helped with Step Back, Helped on March 27th, 2019 via Face-to-Face.
 
 </font>
 
