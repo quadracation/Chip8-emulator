@@ -930,6 +930,12 @@ The test file contains main functional testing to ensure that regular operations
 
 - [32] J. Ortega, Helped with Step Back, Helped on March 27th, 2019 via Face-to-Face.
 
+- [33] Sound Jay, “Beep Sounds”, in soundjay.com, [Online], available at - https://www.soundjay.com/beep-sounds-1.html, 2019.
+
+- [34] Uri, “Playing audio with Javascript?”, in Stack Overflow, [Online], available at - https://stackoverflow.com/questions/9419263/playing-audio-with-javascript, 2012.
+
+- [35] Alec Kravets, "How to set volume of audio object?", in Stack Overflow, [Online], available at - https://stackoverflow.com/questions/37115491/how-to-set-volume-of-audio-object, 2012.
+
 </font>
 
 
